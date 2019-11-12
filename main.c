@@ -29,6 +29,11 @@
  */
 
 #include "MKL25Z4.h"
+#include "h1/dsf_GPIO_ocp.h"
+#include "h1/dsf_Delay_ocp.h"
+
+
+
 
 static int i = 0;
 
@@ -38,12 +43,9 @@ int main(void)
     /* Write your code here */
 
     /* This for loop should be replaced. By default this loop allows a single stepping. */
-    for (;;) {
+    while (1) {
         i++;
     }
     /* Never leave main */
     return 0;
 }
-////////////////////////////////////////////////////////////////////////////////
-// EOF
-////////////////////////////////////////////////////////////////////////////////
