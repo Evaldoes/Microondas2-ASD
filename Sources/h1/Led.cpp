@@ -5,24 +5,25 @@
  *      Author: caio_
  */
 
-#include <h1/Led.h>
+#include "h1/Led.h"
 #include <stdint.h>
 #include "h1/dsf_GPIO_ocp.h"
 
-Led::Led(dsf_GPIO_ocp pin) {
-	// TODO Auto-generated constructor stub
-	this->ledPin = pin;
-	this->state = 0;
-}
+//Led::Led(){}
 
-Led::~Led() {
-	// TODO Auto-generated destructor stub
+//Led::~Led() {
+//	// TODO Auto-generated destructor stub
+//}
+
+void Led::setup(dsf_GPIO_ocp pin) {
+	ledPin = pin;
+	state = 0;
 }
 
 void Led::setState(uint32_t select) {
-	this->state = select;
+	state = select;
 }
 
 void Led::switchState() {
-	this->state != this->state;
+	state != state;
 }

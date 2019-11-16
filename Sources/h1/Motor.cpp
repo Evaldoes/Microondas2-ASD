@@ -5,30 +5,34 @@
  *      Author: caio_
  */
 
-#include <h1/Motor.h>
+#include "h1/Motor.h"
 #include "h1/mkl_TPM.h"
+#include "h1/mkl_TPMPulseWidthModulation.h"
 
-Motor::Motor(tpm_Pin motorPin) {
-	// TODO Auto-generated constructor stub
-	motor.mkl_TPMPulseWidthModulation(motorPin);
-	motor.setFrequency(tpm_Div16, 999);
+//Motor::Motor() {
+//	// TODO Auto-generated constructor stub
+//
+//Motor::~Motor() {
+//	// TODO Auto-generated destructor stub
+//}
+
+void Motor::setupMotor(tpm_Pin motorPin) {
+	mkl_TPMPulseWidthModulation motorConstructor(motorPin);
+	motorObjt = motorConstructor;
+	motorObjt.setFrequency(tpm_div16, 999);
 }
 
-Motor::~Motor() {
-	// TODO Auto-generated destructor stub
-}
-
-Motor::setControl(uint32_t inputOrigin) {
+void Motor::setControl(uint32_t inputOrigin) {
 	control = inputOrigin;
 }
 
-Motor::setSpeed() {
+void Motor::setSpeed() {
 	speed = (control == 0) ? 1 : 0;
 
 	//configura PWM
 }
 
-Motor::setRotation() {
+void Motor::setRotation() {
 	if (operating) {
 		clockWiseRotation = (control == 0) ? true : false;
 		if (clockWiseRotation) {
@@ -47,24 +51,24 @@ Motor::setRotation() {
 
 }
 
-Motor::switchState() {
+void Motor::switchState() {
 	if (operating) {
 		operating = false;
-		setRotation(0);
+		setRotation();
 	}
 	else {
 		operating = true;
-		setRotation(control);
-		setSpeed(control);
+		setRotation();
+		setSpeed();
 		setupPWM();
 	}
 }
 
-Motor::setupPWM(){
+void Motor::setupPWM(){
 	if (control == 0) {
-		motor.setDutyCycle(100);
+		motorObjt.setDutyCycle(100);
 	}
 	else {
-		motor.setDutyCycle(600);
+		motorObjt.setDutyCycle(600);
 	}
 }

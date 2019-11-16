@@ -41,7 +41,7 @@
  */
 
 #include <MKL25Z4.h>
-#include <h1/dsf_GPIO_ocp.h>
+#include "h1/dsf_GPIO_ocp.h"
 
 /*!
  *   @fn       dsf_GPIO_ocp
@@ -63,11 +63,20 @@
  *             - PortxPCRn: Pin Control Register.P�g. 183 (Mux) and 185 (Pull).
  */
 
+dsf_GPIO_ocp::dsf_GPIO_ocp(){}
+
 dsf_GPIO_ocp::dsf_GPIO_ocp(GPIO_t::dsf_GPIO GPIOName, GPIO_t::dsf_Pin pin) {
   pinPort = 1 << pin;
   bindPeripheral(GPIOName, pin);
   enableModuleClock(GPIOName);
   selectMuxAlternative();
+}
+
+void dsf_GPIO_ocp::setupPin(GPIO_t::dsf_GPIO GPIOName, GPIO_t::dsf_Pin pin) {
+	pinPort = 1 << pin;
+	bindPeripheral(GPIOName, pin);
+	enableModuleClock(GPIOName);
+	selectMuxAlternative();
 }
 
 /*!

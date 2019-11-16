@@ -159,7 +159,14 @@ class dsf_GPIO_ocp {
   /*!
    * M�todo construtor padr�o da classe.
    */
+  explicit dsf_GPIO_ocp();
   explicit dsf_GPIO_ocp(GPIO_t::dsf_GPIO GPIOName, GPIO_t::dsf_Pin pin);
+
+  /*!
+   *
+   */
+  void setupPin(GPIO_t::dsf_GPIO GPIOName, GPIO_t::dsf_Pin pin);
+
   /*!
    * M�todos de configura��o do pino.
    */

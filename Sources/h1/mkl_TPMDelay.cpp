@@ -40,7 +40,7 @@
  */
 
 #include <stdint.h>
-#include "mkl_TPMDelay.h"
+#include "h1/mkl_TPMDelay.h"
 
   /*!
    *   @fn       mkl_TPMDelay

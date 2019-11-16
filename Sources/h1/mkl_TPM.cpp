@@ -38,7 +38,7 @@
  *
  * @htmlonly    http://www.gnu.org/copyleft/gpl.html
  */
-#include "mkl_TPM.h"
+#include "h1/mkl_TPM.h"
 
 /*!
  *   @fn         bindPeripheral

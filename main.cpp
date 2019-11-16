@@ -32,6 +32,7 @@
 
 #include "MKL25Z4.h"
 #include "h1/dsf_GPIO_ocp.h"
+//#include "h1/mkl_TPM.h"
 #include "h1/mkl_TPMDelay.h"
 #include "h1/mkl_TPMPulseWidthModulation.h"
 #include "h1/Led.h"
@@ -48,37 +49,50 @@
 
 // BOTOES E CHAVES
 
-dsf_GPIO_ocp startPause_btn(dsf_GPIOC,dsf_PTC1);
-dsf_GPIO_ocp cancel_btn(dsf_GPIOE,dsf_PTE30);
-dsf_GPIO_ocp endOperation_btn(dsf_GPIOC,dsf_PTC2);
-dsf_GPIO_ocp door_Key(dsf_GPIOE,dsf_PTE29);
-
-//Debounce dos botoes
-
+//dsf_GPIO_ocp startPause_btn(GPIO_t::dsf_GPIOC,GPIO_t::dsf_PTC1);
+//dsf_GPIO_ocp cancel_btn(GPIO_t::dsf_GPIOE,GPIO_t::dsf_PTE29);
+//dsf_GPIO_ocp endOperation_btn(GPIO_t::dsf_GPIOC,GPIO_t::dsf_PTC2);
+//dsf_GPIO_ocp door_Key(GPIO_t::dsf_GPIOE,GPIO_t::dsf_PTE29);
+//
+////Debounce dos botoes
+//
 uint32_t low = LOW;
 uint32_t high = HIGH;
-
-DebouncedButton dsP_Btn(startPause_btn,low);
-DebouncedButton dc_Btn(cancel_btn,low);
-DebouncedButton deO_Btn(endOperation_btn,low);
-
-// LED	BUZZER	MOTOR_PWM
-
-dsf_GPIO_ocp ledDoor(dsf_GPIOA,dsf_PTA1);
-dsf_GPIO_ocp buzzer(dsf_GPIOA,dsf_PTA2);
-dsf_GPIO_ocp motor(dsf_GPIOC,dsf_PTC7);
-
-Led doorSensor(ledDoor);
-Motor motor()
+//
+DebouncedButton dsP_Btn(GPIO_t::dsf_GPIOC,GPIO_t::dsf_PTC1,high);
+//
+//// LED	BUZZER	MOTOR_PWM
+//
+//dsf_GPIO_ocp ledDoor(GPIO_t::dsf_GPIOA,GPIO_t::dsf_PTA1);
+//dsf_GPIO_ocp buzzer(GPIO_t::dsf_GPIOA,GPIO_t::dsf_PTA2);
+//
+////Led doorSensor();
+//Motor motor(tpm_Pin tpm_PTA13);
+//
+//void setup() {
+//	Led doorSensor();
+//}
 
 int main(void)
 {
+	dsf_GPIO_ocp greenLed(GPIO_t::dsf_GPIOB, GPIO_t::dsf_PTB18);
+	greenLed.setPortMode(PortMode_t::Output);
+	dsP_Btn.getButtonPin().setPullResistor(PullResistor_t::PullUpResistor);
+	mkl_TPMDelay delay(tpm_TPMNumberMask::tpm_TPM0);
+	delay.setFrequency(tpm_Div::tpm_div32);
+
+	greenLed.writeBit(0);
 
     /* Write your code here */
 
     /* This for loop should be replaced. By default this loop allows a single stepping. */
     while (1) {
-        i++;
+    	delay.waitDelay(0XFFF);
+    	if(dsP_Btn.getState() == dsP_Btn.Pressed) {
+    		delay.waitDelay(0XFFFF);
+    		delay.waitDelay(0xFFFF);
+    		greenLed.toogleBit();
+    	}
     }
     /* Never leave main */
     return 0;

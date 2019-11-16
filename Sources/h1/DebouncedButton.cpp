@@ -6,29 +6,23 @@
  */
 
 #include "h1/DebouncedButton.h"
-#include "dsf_GPIO_ocp.h"
+#include "h1/dsf_GPIO_ocp.h"
 
 #define LOW 0
 #define HIGH 1
 /*
  * Setup the class
  */
-
-DebouncedButton::DebouncedButton(dsf_GPIO_ocp pinBtt_,uint8_t pressedState_) {
-	_pinBtt=pinBtt_;
+DebouncedButton::DebouncedButton(GPIO_t::dsf_GPIO GPIOName, GPIO_t::dsf_Pin pin,uint8_t pressedState_) {
+	_pinBtt.setupPin(GPIOName,pin);
 	_pressedState=pressedState_;
 	_internalState=Idle;
 	newTime = 0;
 }
 
-void DebouncedButton::setup(dsf_GPIO_ocp pinBtt_,uint8_t pressedState_)
-{
-  _pinBtt=pinBtt_;
-  _pressedState=pressedState_;
-  _internalState=Idle;
-  newTime = 0;
+dsf_GPIO_ocp DebouncedButton::getButtonPin() {
+	return _pinBtt;
 }
-
 
 /*
  * Get the current state

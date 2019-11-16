@@ -41,7 +41,7 @@
 
 #include <stdint.h>
 #include <MKL25Z4.h>
-#include "mkl_TPMPulseWidthModulation.h"
+#include "h1/mkl_TPMPulseWidthModulation.h"
 
 /*!
  *   @fn         mkl_TPMPulseWidthModulation.

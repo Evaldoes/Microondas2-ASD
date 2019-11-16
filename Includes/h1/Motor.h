@@ -15,15 +15,16 @@
 
 class Motor {
 public:
-	Motor(tpm_Pin motorPin);
-	virtual ~Motor();
+//	Motor();
+//	virtual ~Motor();
+	void setupMotor(tpm_Pin motorPin);
 	void setSpeed();
 	void setRotation();
 	void setControl(uint32_t inputOrigin);
 	void switchState(); 				//enable or disable
 	void setupPWM();
 private:
-	mkl_TPMPulseWidthModulation motor;
+	mkl_TPMPulseWidthModulation motorObjt;
 	uint32_t speed, dutyCycle, control;
 	bool clockWiseRotation, operating;
 	int inDriveRight, inDriveLeft;

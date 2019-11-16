@@ -20,7 +20,7 @@ class DebouncedButton
 
 private:
 	// time to wait for bounce to clear
-	static const uint32_t DEBOUNCE_DELAY_MILLIS=4;
+	static const uint32_t DEBOUNCE_DELAY_MILLIS=100;
 	uint32_t newTime;
 
   // Internal button state
@@ -45,7 +45,7 @@ private:
 
 public:
 
-  DebouncedButton(dsf_GPIO_ocp pinBtt_,uint8_t pressedState_);
+  DebouncedButton(GPIO_t::dsf_GPIO GPIOName, GPIO_t::dsf_Pin pin,uint8_t pressedState_);
 		// Possible button states
     enum ButtonState
     {
@@ -53,8 +53,9 @@ public:
       Pressed,							// button is down
     };
 
+    dsf_GPIO_ocp getButtonPin();
   // Setup the class
-  void setup(dsf_GPIO_ocp pinBtt_,uint8_t pressedState_);
+//  void setup(dsf_GPIO_ocp pinBtt_,uint8_t pressedState_);
 
   // Get the current state of the button
   ButtonState getState();
