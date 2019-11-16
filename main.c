@@ -28,21 +28,39 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include <stdint.h>
+
 #include "MKL25Z4.h"
 #include "h1/dsf_GPIO_ocp.h"
 #include "h1/mkl_TPMDelay.h"
 #include "h1/mkl_TPMPulseWidthModulation.h"
+#include "h1/Led.h"
+#include "h1/DebouncedButton.h"
+#include "h1/Motor.h"
+
+
+#define LOW 0
+#define HIGH 1
 
 /*
  * Criacao dos objetos perifericos
  */
 
-// BOTOES
+// BOTOES E CHAVES
 
 dsf_GPIO_ocp startPause_btn(dsf_GPIOC,dsf_PTC1);
 dsf_GPIO_ocp cancel_btn(dsf_GPIOE,dsf_PTE30);
 dsf_GPIO_ocp endOperation_btn(dsf_GPIOC,dsf_PTC2);
-dsf_GPIO_ocp cancel_btn(dsf_GPIOE,dsf_PTE29);
+dsf_GPIO_ocp door_Key(dsf_GPIOE,dsf_PTE29);
+
+//Debounce dos botoes
+
+uint32_t low = LOW;
+uint32_t high = HIGH;
+
+DebouncedButton dsP_Btn(startPause_btn,low);
+DebouncedButton dc_Btn(cancel_btn,low);
+DebouncedButton deO_Btn(endOperation_btn,low);
 
 // LED	BUZZER	MOTOR_PWM
 
@@ -50,9 +68,8 @@ dsf_GPIO_ocp ledDoor(dsf_GPIOA,dsf_PTA1);
 dsf_GPIO_ocp buzzer(dsf_GPIOA,dsf_PTA2);
 dsf_GPIO_ocp motor(dsf_GPIOC,dsf_PTC7);
 
-
-
-static int i = 0;
+Led doorSensor(ledDoor);
+Motor motor()
 
 int main(void)
 {

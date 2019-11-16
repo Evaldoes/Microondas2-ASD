@@ -11,7 +11,6 @@
 enum operation_State{
 	inOperation,
 	paused,
-	canceled,
 	standBy,
 };
 
