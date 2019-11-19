@@ -55,6 +55,8 @@
  *   @param[in]  pin - pino de saída do sinal PWM gerado.
  *
  */
+mkl_TPMPulseWidthModulation::mkl_TPMPulseWidthModulation() {}
+
 mkl_TPMPulseWidthModulation::mkl_TPMPulseWidthModulation(tpm_Pin pin) {
   uint8_t muxAltMask;
   uint8_t pinNumber;

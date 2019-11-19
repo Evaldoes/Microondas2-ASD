@@ -68,6 +68,7 @@ class mkl_TPMPulseWidthModulation : public mkl_TPM {
   /*!
    * Método construtor padrão da classe.
    */
+  mkl_TPMPulseWidthModulation();
   explicit mkl_TPMPulseWidthModulation(tpm_Pin pin);
 
   /*!

@@ -32,13 +32,15 @@
 
 #include "MKL25Z4.h"
 #include "h1/dsf_GPIO_ocp.h"
-//#include "h1/mkl_TPM.h"
 #include "h1/mkl_TPMDelay.h"
 #include "h1/mkl_TPMPulseWidthModulation.h"
 #include "h1/Led.h"
 #include "h1/DebouncedButton.h"
 #include "h1/Motor.h"
 
+#include "h1/Monitor.h"
+#include "h1/SinalizationServiceController.h"
+#include "h1/MotorServiceController.h"
 
 #define LOW 0
 #define HIGH 1
@@ -49,51 +51,73 @@
 
 // BOTOES E CHAVES
 
-//dsf_GPIO_ocp startPause_btn(GPIO_t::dsf_GPIOC,GPIO_t::dsf_PTC1);
-//dsf_GPIO_ocp cancel_btn(GPIO_t::dsf_GPIOE,GPIO_t::dsf_PTE29);
-//dsf_GPIO_ocp endOperation_btn(GPIO_t::dsf_GPIOC,GPIO_t::dsf_PTC2);
-//dsf_GPIO_ocp door_Key(GPIO_t::dsf_GPIOE,GPIO_t::dsf_PTE29);
-//
-////Debounce dos botoes
-//
 uint32_t low = LOW;
 uint32_t high = HIGH;
+
+DebouncedButton startPause_Btn(GPIO_t::dsf_GPIOC,GPIO_t::dsf_PTC1,low);
+DebouncedButton cancel_Btn(GPIO_t::dsf_GPIOE,GPIO_t::dsf_PTE29,low);
+DebouncedButton endOperation_Btn(GPIO_t::dsf_GPIOC,GPIO_t::dsf_PTC2,low);
+
+// Porta
+
+dsf_GPIO_ocp door_Key(GPIO_t::dsf_GPIOC,GPIO_t::dsf_PTC7);
+dsf_GPIO_ocp ledDoor(GPIO_t::dsf_GPIOA,GPIO_t::dsf_PTA1);
+dsf_GPIO_ocp buzzer(GPIO_t::dsf_GPIOB,GPIO_t::dsf_PTB19);
+
+// Motor
+dsf_GPIO_ocp inDriverRight(GPIO_t::dsf_GPIOC, GPIO_t::dsf_PTC13);
+dsf_GPIO_ocp inDriverLeft(GPIO_t::dsf_GPIOC, GPIO_t::dsf_PTC12);
+
+Motor * motorPeripheral = new Motor();
+
+// DELAY
+
+mkl_TPMDelay delay(tpm_TPMNumberMask::tpm_TPM0);
+
+// CONTROLADORES
+
+//Monitor monitor;
+
+void setup(){
+
+	startPause_Btn.getButtonPin().setPullResistor(PullResistor_t::PullUpResistor);
+	cancel_Btn.getButtonPin().setPullResistor(PullResistor_t::PullUpResistor);
+	endOperation_Btn.getButtonPin().setPullResistor(PullResistor_t::PullUpResistor);
+
+	door_Key.setPortMode(PortMode_t::Input);
+	ledDoor.setPortMode(PortMode_t::Output);
+	buzzer.setPortMode(PortMode_t::Output);
+	ledDoor.writeBit(0);
+
+	motorPeripheral->setPWMPin(tpm_Pin::tpm_PTD4);
+	inDriverRight.setPortMode(PortMode_t::Output);
+	inDriverLeft.setPortMode(PortMode_t::Output);
+	motorPeripheral->setDriverInputs(inDriverRight,inDriverLeft);
+
+	delay.setFrequency(tpm_Div::tpm_div32);
+
+//	SinalizationServiceController sinalizationController(buzzer,door_Key,ledDoor);
+//	MotorServiceController motorController(motorDrive);
 //
-DebouncedButton dsP_Btn(GPIO_t::dsf_GPIOC,GPIO_t::dsf_PTC1,high);
-//
-//// LED	BUZZER	MOTOR_PWM
-//
-//dsf_GPIO_ocp ledDoor(GPIO_t::dsf_GPIOA,GPIO_t::dsf_PTA1);
-//dsf_GPIO_ocp buzzer(GPIO_t::dsf_GPIOA,GPIO_t::dsf_PTA2);
-//
-////Led doorSensor();
-//Motor motor(tpm_Pin tpm_PTA13);
-//
-//void setup() {
-//	Led doorSensor();
-//}
+//	Monitor monitor(startPause_Btn,cancel_Btn,endOperation_Btn,sinalizationController,motorController);
+}
 
 int main(void)
 {
-	dsf_GPIO_ocp greenLed(GPIO_t::dsf_GPIOB, GPIO_t::dsf_PTB18);
-	greenLed.setPortMode(PortMode_t::Output);
-	dsP_Btn.getButtonPin().setPullResistor(PullResistor_t::PullUpResistor);
-	mkl_TPMDelay delay(tpm_TPMNumberMask::tpm_TPM0);
-	delay.setFrequency(tpm_Div::tpm_div32);
+	setup();
 
-	greenLed.writeBit(0);
+	SinalizationServiceController sinalizationController(buzzer,door_Key,ledDoor);
+	MotorServiceController motorController(motorPeripheral);
+	Monitor monitor(startPause_Btn,cancel_Btn,endOperation_Btn,sinalizationController,motorController);
 
-    /* Write your code here */
-
-    /* This for loop should be replaced. By default this loop allows a single stepping. */
-    while (1) {
-    	delay.waitDelay(0XFFF);
-    	if(dsP_Btn.getState() == dsP_Btn.Pressed) {
-    		delay.waitDelay(0XFFFF);
-    		delay.waitDelay(0xFFFF);
-    		greenLed.toogleBit();
-    	}
+	while (true) {
+		monitor.readInputs();
     }
-    /* Never leave main */
     return 0;
 }
+
+// 	dsf_GPIO_ocp greenLed(GPIO_t::dsf_GPIOB, GPIO_t::dsf_PTB18);
+//	greenLed.setPortMode(PortMode_t::Output);
+//	dsP_Btn.getButtonPin().setPullResistor(PullResistor_t::PullUpResistor);
+//	greenLed.writeBit(0);
+

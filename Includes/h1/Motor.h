@@ -15,19 +15,22 @@
 
 class Motor {
 public:
-//	Motor();
+	Motor();
+	explicit Motor(tpm_Pin motorPin);
 //	virtual ~Motor();
-	void setupMotor(tpm_Pin motorPin);
-	void setSpeed();
+//	void setupMotor(tpm_Pin motorPin, dsf_GPIO_ocp _inDriveRight, dsf_GPIO_ocp _inDriveLeft);
+	void setPWMPin(tpm_Pin pin);
+	void setDriverInputs(dsf_GPIO_ocp _inDriveRight, dsf_GPIO_ocp _inDriveLeft);
 	void setRotation();
 	void setControl(uint32_t inputOrigin);
-	void switchState(); 				//enable or disable
-	void setupPWM();
+	void setSpeed();
+	void powerConfig();
+	void enableDisablePower();
 private:
-	mkl_TPMPulseWidthModulation motorObjt;
+	mkl_TPMPulseWidthModulation motor;
+	dsf_GPIO_ocp inDriveRight, inDriveLeft;
 	uint32_t speed, dutyCycle, control;
 	bool clockWiseRotation, operating;
-	int inDriveRight, inDriveLeft;
 };
 
 #endif /* SOURCES_H1_MOTOR_H_ */

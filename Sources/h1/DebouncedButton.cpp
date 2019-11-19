@@ -7,17 +7,25 @@
 
 #include "h1/DebouncedButton.h"
 #include "h1/dsf_GPIO_ocp.h"
+#include "h1/mkl_TPM.h"
+#include "h1/mkl_TPMDelay.h"
 
 #define LOW 0
 #define HIGH 1
+
 /*
  * Setup the class
  */
+DebouncedButton::DebouncedButton() {
+
+}
+
 DebouncedButton::DebouncedButton(GPIO_t::dsf_GPIO GPIOName, GPIO_t::dsf_Pin pin,uint8_t pressedState_) {
 	_pinBtt.setupPin(GPIOName,pin);
 	_pressedState=pressedState_;
 	_internalState=Idle;
 	newTime = 0;
+//	delay = new mkl_TPMDelay(tpm_TPMNumberMask::tpm_TPM0);
 }
 
 dsf_GPIO_ocp DebouncedButton::getButtonPin() {
@@ -28,49 +36,54 @@ dsf_GPIO_ocp DebouncedButton::getButtonPin() {
  * Get the current state
  */
 
-DebouncedButton::ButtonState DebouncedButton::getState()
-{
-  int newTime;
-  uint8_t state;
+DebouncedButton::ButtonState DebouncedButton::getState() {
+	int newTime;
+	uint8_t state;
 
-// read the pin and flip it if this switch reads high when open
+	mkl_TPMDelay delay(tpm_TPMNumberMask::tpm_TPM0);
+	delay.setFrequency(tpm_Div::tpm_div32);
 
-  state=_pinBtt.readBit();
-  if(_pressedState==LOW)
-  	state^=HIGH;
+	// read the pin and flip it if this switch reads high when open
 
-// if state is low then wherever we were, we are now back at not pressed
+	state=_pinBtt.readBit();
+	if(_pressedState==LOW)
+		state^=HIGH;
 
-  if(state==LOW)
-  {
-    _internalState=Idle;
-    return NotPressed;
-  }
+	// if state is low then wherever we were, we are now back at not pressed
 
-// sample the clock
+	if(state==LOW)
+	{
+		_internalState=Idle;
+		return NotPressed;
+	}
 
-  newTime += 1;
+	// sample the clock
 
-// act on the internal state machine
+	newTime += 1;
 
-  switch(_internalState)
-  {
-    case Idle:
-      _internalState=DebounceDelay;
-      _lastTime=0;
-      break;
+	// act on the internal state machine
 
-    case DebounceDelay:
-      if(newTime-_lastTime>=DEBOUNCE_DELAY_MILLIS)
-      {
-      // been high for at least the debounce time: we are pressed
-    	newTime = 0;
-        return Pressed;
-      }
-      break;
+	switch(_internalState)
+	{
+    	case Idle:
+    		_internalState=DebounceDelay;
+    		_lastTime=0;
+    		break;
+
+    	case DebounceDelay:
+    		if(newTime-_lastTime>=DEBOUNCE_DELAY_MILLIS)
+    		{
+    			// been high for at least the debounce time: we are pressed
+    			delay.waitDelay(0xFFFF);
+    			delay.waitDelay(0xFFFF);
+    			delay.waitDelay(0xFFFF);
+    			newTime = 0;
+    			return Pressed;
+    		}
+    		break;
   }
 
 // nothing happened at this time
 
-  return NotPressed;
+	return NotPressed;
 }
