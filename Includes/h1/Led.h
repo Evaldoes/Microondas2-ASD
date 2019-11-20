@@ -11,16 +11,23 @@
 #include <stdint.h>
 #include "dsf_GPIO_ocp.h"
 
+enum onOff {
+	isOn,
+	isOff
+};
+
 class Led {
 public:
-//	Led();
+	Led();
 //	virtual ~Led();
 	void setup(dsf_GPIO_ocp pin);
-	void setState(uint32_t select);
-	void switchState();
+	void setState(int select);
+	int getState();
+	void switchState(bool pression);
 private:
-	uint32_t state;
+	int state;
 	dsf_GPIO_ocp ledPin;
+	onOff status;
 };
 
 #endif /* SOURCES_H1_LED_H_ */

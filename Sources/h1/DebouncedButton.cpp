@@ -20,12 +20,9 @@ DebouncedButton::DebouncedButton() {
 
 }
 
-DebouncedButton::DebouncedButton(GPIO_t::dsf_GPIO GPIOName, GPIO_t::dsf_Pin pin,uint8_t pressedState_) {
+DebouncedButton::DebouncedButton(GPIO_t::dsf_GPIO GPIOName, GPIO_t::dsf_Pin pin, PullResistor_t::dsf_PullResistor pullResistor) {
 	_pinBtt.setupPin(GPIOName,pin);
-	_pressedState=pressedState_;
-	_internalState=Idle;
-	newTime = 0;
-//	delay = new mkl_TPMDelay(tpm_TPMNumberMask::tpm_TPM0);
+	_pinBtt.setPullResistor(pullResistor);
 }
 
 dsf_GPIO_ocp DebouncedButton::getButtonPin() {
@@ -35,55 +32,17 @@ dsf_GPIO_ocp DebouncedButton::getButtonPin() {
 /*
  * Get the current state
  */
-
-DebouncedButton::ButtonState DebouncedButton::getState() {
-	int newTime;
-	uint8_t state;
-
+bool DebouncedButton::getActivity() {
 	mkl_TPMDelay delay(tpm_TPMNumberMask::tpm_TPM0);
-	delay.setFrequency(tpm_Div::tpm_div32);
+	delay.setFrequency(tpm_Div::tpm_div128);
 
-	// read the pin and flip it if this switch reads high when open
-
-	state=_pinBtt.readBit();
-	if(_pressedState==LOW)
-		state^=HIGH;
-
-	// if state is low then wherever we were, we are now back at not pressed
-
-	if(state==LOW)
-	{
-		_internalState=Idle;
-		return NotPressed;
+	if(_pinBtt.readBit() == 1) {
+		delay.waitDelay(0xFFFF);
+		status = pressed;
 	}
-
-	// sample the clock
-
-	newTime += 1;
-
-	// act on the internal state machine
-
-	switch(_internalState)
-	{
-    	case Idle:
-    		_internalState=DebounceDelay;
-    		_lastTime=0;
-    		break;
-
-    	case DebounceDelay:
-    		if(newTime-_lastTime>=DEBOUNCE_DELAY_MILLIS)
-    		{
-    			// been high for at least the debounce time: we are pressed
-    			delay.waitDelay(0xFFFF);
-    			delay.waitDelay(0xFFFF);
-    			delay.waitDelay(0xFFFF);
-    			newTime = 0;
-    			return Pressed;
-    		}
-    		break;
-  }
-
-// nothing happened at this time
-
-	return NotPressed;
+	else {
+		status = notPressed;
+	}
+	return status;
 }
+

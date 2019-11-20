@@ -20,7 +20,7 @@ public:
 	MotorServiceController();
 	MotorServiceController(Motor * _hBridgeAcess);
 	virtual ~MotorServiceController();
-	void enableDisablePower();
+	void enableDisablePower(bool inputBtn);
 private:
 	Motor * hBridgeAcess;
 	StatusMotor actualState;

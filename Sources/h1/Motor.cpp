@@ -10,13 +10,14 @@
 #include "h1/mkl_TPMPulseWidthModulation.h"
 #include "h1/dsf_GPIO_ocp.h"
 
-Motor::Motor() {operating = false;}
+Motor::Motor() {operation = waitOp;}
 
 void Motor::setPWMPin(tpm_Pin pin) {
 	mkl_TPMPulseWidthModulation motorConstructor(pin);
 	motor = motorConstructor;
 	motor.setFrequency(tpm_div16, 999);
 	control = 0;
+
 }
 //Motor::~Motor() {
 //	// TODO Auto-generated destructor stub
@@ -51,7 +52,7 @@ void Motor::setRotation() {
 
 void Motor::setSpeed(){
 	if (control == 0) {
-		motor.setDutyCycle(100);
+		motor.setDutyCycle(0);
 	}
 	else {
 		motor.setDutyCycle(600);
@@ -64,13 +65,19 @@ void Motor::powerConfig() {
 	setSpeed();
 }
 
-void Motor::enableDisablePower() {
-	if (operating) {
-		motor.disableOperation();
-		operating = false;
-	}
-	else {
-		motor.enableOperation();
-		operating = true;
+void Motor::enableDisablePower(bool inputBtn) {
+	switch (operation) {
+	case waitOp:
+		if (inputBtn) {
+			motor.enableOperation();
+			operation = inOperation;
+		}
+		break;
+	case inOperation:
+		if (inputBtn) {
+			motor.disableOperation();
+			operation = waitOp;
+		}
+		break;
 	}
 }

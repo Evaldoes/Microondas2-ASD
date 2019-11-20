@@ -25,9 +25,9 @@ Monitor::~Monitor() {
 void Monitor::readInputs() {
 	switch (status) {
 		case standby:
-			if (startPause.getState()==startPause.Pressed && sinalizationCtrl.isDoorClosed()) {
+			if (sinalizationCtrl.isDoorClosed()) {
 				//enableTimer();
-				motorCtrl.enableDisablePower();
+				motorCtrl.enableDisablePower(startPause.getActivity());
 				status = operationStates::operating;
 			}
 			// SE CLICAR EM CANCEL MANDA UM CLEAR();
@@ -35,32 +35,33 @@ void Monitor::readInputs() {
 		case operating:
 			if (!sinalizationCtrl.isDoorClosed()) {
 				status = paused;
+				motorCtrl.enableDisablePower(true);
 			}
 			else {
-				if (startPause.getState()==startPause.Pressed) {
+				if (startPause.getActivity()) {
 					//disableTimer();
 					status = paused;
 				}
-				if (cancel.getState()==cancel.Pressed) {
+				if (cancel.getActivity()) {
 					//disableTimer();
 					//clear();
 					status = standby;
 				}
-				if (endOp.getState()==endOp.Pressed) {
+				if (endOp.getActivity()) {
 					//disableTimer();
 					sinalizationCtrl.callEndOfOperation();
 					status = standby;
 				}
+				motorCtrl.enableDisablePower(true);
 			}
-			motorCtrl.enableDisablePower();
 			break;
 		case paused:
-			if (startPause.getState()==startPause.Pressed && sinalizationCtrl.isDoorClosed()) {
+			if (sinalizationCtrl.isDoorClosed()) {
 				//enableTimer();
-				motorCtrl.enableDisablePower();
+				motorCtrl.enableDisablePower(startPause.getActivity());
 				status = operating;
 			}
-			if (cancel.getState()==cancel.Pressed) {
+			if (cancel.getActivity()) {
 				//disableTimer();
 				//clear();
 				status = standby;

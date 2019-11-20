@@ -51,67 +51,99 @@
 
 // BOTOES E CHAVES
 
-uint32_t low = LOW;
-uint32_t high = HIGH;
-
-DebouncedButton startPause_Btn(GPIO_t::dsf_GPIOC,GPIO_t::dsf_PTC1,low);
-DebouncedButton cancel_Btn(GPIO_t::dsf_GPIOE,GPIO_t::dsf_PTE29,low);
-DebouncedButton endOperation_Btn(GPIO_t::dsf_GPIOC,GPIO_t::dsf_PTC2,low);
-
-// Porta
-
-dsf_GPIO_ocp door_Key(GPIO_t::dsf_GPIOC,GPIO_t::dsf_PTC7);
-dsf_GPIO_ocp ledDoor(GPIO_t::dsf_GPIOA,GPIO_t::dsf_PTA1);
-dsf_GPIO_ocp buzzer(GPIO_t::dsf_GPIOB,GPIO_t::dsf_PTB19);
-
-// Motor
+//DebouncedButton startPause_Btn(GPIO_t::dsf_GPIOC,GPIO_t::dsf_PTC1,low);
+//DebouncedButton cancel_Btn(GPIO_t::dsf_GPIOE,GPIO_t::dsf_PTE29,low);
+//DebouncedButton endOperation_Btn(GPIO_t::dsf_GPIOC,GPIO_t::dsf_PTC2,low);
+//
+//// Porta
+//
+//dsf_GPIO_ocp door_Key(GPIO_t::dsf_GPIOC,GPIO_t::dsf_PTC7);
+//dsf_GPIO_ocp ledDoor(GPIO_t::dsf_GPIOA,GPIO_t::dsf_PTA1);
+//dsf_GPIO_ocp buzzer(GPIO_t::dsf_GPIOB,GPIO_t::dsf_PTB19);
+//
+//// Motor
 dsf_GPIO_ocp inDriverRight(GPIO_t::dsf_GPIOC, GPIO_t::dsf_PTC13);
 dsf_GPIO_ocp inDriverLeft(GPIO_t::dsf_GPIOC, GPIO_t::dsf_PTC12);
-
+//
 Motor * motorPeripheral = new Motor();
+//
+//// DELAY
+//
+//mkl_TPMDelay delay(tpm_TPMNumberMask::tpm_TPM0);
+//
+//// CONTROLADORES
+//
+////Monitor monitor;
+//
+//void setup(){
+//
+//	startPause_Btn.getButtonPin().setPullResistor(PullResistor_t::PullUpResistor);
+//	cancel_Btn.getButtonPin().setPullResistor(PullResistor_t::PullUpResistor);
+//	endOperation_Btn.getButtonPin().setPullResistor(PullResistor_t::PullUpResistor);
+//
+//	door_Key.setPortMode(PortMode_t::Input);
+//	ledDoor.setPortMode(PortMode_t::Output);
+//	buzzer.setPortMode(PortMode_t::Output);
+//	ledDoor.writeBit(0);
+//	buzzer.writeBit(0);
+//
+//	motorPeripheral->setPWMPin(tpm_Pin::tpm_PTD4);
+//	inDriverRight.setPortMode(PortMode_t::Output);
+//	inDriverLeft.setPortMode(PortMode_t::Output);
+//	motorPeripheral->setDriverInputs(inDriverRight,inDriverLeft);
+//
+//	delay.setFrequency(tpm_Div::tpm_div32);
+//
+////	SinalizationServiceController sinalizationController(buzzer,door_Key,ledDoor);
+////	MotorServiceController motorController(motorDrive);
+////
+////	Monitor monitor(startPause_Btn,cancel_Btn,endOperation_Btn,sinalizationController,motorController);
+//}
 
-// DELAY
+int main(void)
+{
+//	setup();
+//
+//	SinalizationServiceController sinalizationController(buzzer,door_Key,ledDoor);
+//	MotorServiceController motorController(motorPeripheral);
+//	Monitor monitor(startPause_Btn,cancel_Btn,endOperation_Btn,sinalizationController,motorController);
 
-mkl_TPMDelay delay(tpm_TPMNumberMask::tpm_TPM0);
+//	DebouncedButton startPause_Btn(GPIO_t::dsf_GPIOC,GPIO_t::dsf_PTC1,low);
+//	startPause_Btn.getButtonPin().setPullResistor(PullResistor_t::PullNoneResistor);
 
-// CONTROLADORES
-
-//Monitor monitor;
-
-void setup(){
-
-	startPause_Btn.getButtonPin().setPullResistor(PullResistor_t::PullUpResistor);
-	cancel_Btn.getButtonPin().setPullResistor(PullResistor_t::PullUpResistor);
-	endOperation_Btn.getButtonPin().setPullResistor(PullResistor_t::PullUpResistor);
-
-	door_Key.setPortMode(PortMode_t::Input);
-	ledDoor.setPortMode(PortMode_t::Output);
+	dsf_GPIO_ocp buzzer(GPIO_t::dsf_GPIOB,GPIO_t::dsf_PTB19);
 	buzzer.setPortMode(PortMode_t::Output);
-	ledDoor.writeBit(0);
 
 	motorPeripheral->setPWMPin(tpm_Pin::tpm_PTD4);
 	inDriverRight.setPortMode(PortMode_t::Output);
 	inDriverLeft.setPortMode(PortMode_t::Output);
 	motorPeripheral->setDriverInputs(inDriverRight,inDriverLeft);
+	motorPeripheral->powerConfig();
 
-	delay.setFrequency(tpm_Div::tpm_div32);
+//	dsf_GPIO_ocp btn(GPIO_t::dsf_GPIOC,GPIO_t::dsf_PTC1);
+//	btn.setPullResistor(PullResistor_t::PullUpResistor);
 
-//	SinalizationServiceController sinalizationController(buzzer,door_Key,ledDoor);
-//	MotorServiceController motorController(motorDrive);
+	DebouncedButton btn(GPIO_t::dsf_GPIOA,GPIO_t::dsf_PTA1, PullResistor_t::PullUpResistor);
+
 //
-//	Monitor monitor(startPause_Btn,cancel_Btn,endOperation_Btn,sinalizationController,motorController);
-}
-
-int main(void)
-{
-	setup();
-
-	SinalizationServiceController sinalizationController(buzzer,door_Key,ledDoor);
-	MotorServiceController motorController(motorPeripheral);
-	Monitor monitor(startPause_Btn,cancel_Btn,endOperation_Btn,sinalizationController,motorController);
+	Led * greenLed = new Led();
+	greenLed->setup(buzzer);
+	greenLed->setState(1);
 
 	while (true) {
-		monitor.readInputs();
+//		monitor.readInputs();
+//		greenLed->switchState(btn.getActivity());
+
+		motorPeripheral->enableDisablePower(btn.getActivity());
+
+//		if (btn.readBit() == 1) {
+////			greenLed->setState(1);
+//			pwm.enableOperation();
+//		}
+//		else {
+//			pwm.disableOperation();
+////			greenLed->setState(0);
+//		}
     }
     return 0;
 }

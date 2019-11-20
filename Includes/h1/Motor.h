@@ -13,24 +13,32 @@
 #include "dsf_GPIO_ocp.h"
 #include "mkl_TPM.h"
 
+enum pwmPower {
+	waitOp,
+	inOperation
+};
+
 class Motor {
 public:
 	Motor();
 	explicit Motor(tpm_Pin motorPin);
 //	virtual ~Motor();
 //	void setupMotor(tpm_Pin motorPin, dsf_GPIO_ocp _inDriveRight, dsf_GPIO_ocp _inDriveLeft);
+
 	void setPWMPin(tpm_Pin pin);
 	void setDriverInputs(dsf_GPIO_ocp _inDriveRight, dsf_GPIO_ocp _inDriveLeft);
 	void setRotation();
 	void setControl(uint32_t inputOrigin);
 	void setSpeed();
+
 	void powerConfig();
-	void enableDisablePower();
+	void enableDisablePower(bool inputBtn);
 private:
 	mkl_TPMPulseWidthModulation motor;
 	dsf_GPIO_ocp inDriveRight, inDriveLeft;
-	uint32_t speed, dutyCycle, control;
-	bool clockWiseRotation, operating;
+	uint32_t control;
+	bool clockWiseRotation;
+	pwmPower operation;
 };
 
 #endif /* SOURCES_H1_MOTOR_H_ */

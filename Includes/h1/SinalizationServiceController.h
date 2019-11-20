@@ -12,7 +12,7 @@
 #include "h1/dsf_GPIO_ocp.h"
 
 enum StatusSinalization {
-	waiting,
+	waitDoor,
 	working
 };
 

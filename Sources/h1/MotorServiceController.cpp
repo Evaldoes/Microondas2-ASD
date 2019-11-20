@@ -20,7 +20,7 @@ MotorServiceController::~MotorServiceController() {
 	// TODO Auto-generated destructor stub
 }
 
-void MotorServiceController::enableDisablePower() {
+void MotorServiceController::enableDisablePower(bool inputBtn) {
 	actualState = (actualState == waitingWheel) ? workingWheel : waitingWheel;
-	hBridgeAcess->enableDisablePower();
+	hBridgeAcess->enableDisablePower(inputBtn);
 }
