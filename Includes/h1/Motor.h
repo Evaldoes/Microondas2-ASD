@@ -14,14 +14,14 @@
 #include "mkl_TPM.h"
 
 enum pwmPower {
-	waitOp,
-	inOperation
+	waitOp = false,
+	inOperation = true
 };
 
 class Motor {
 public:
 	Motor();
-	explicit Motor(tpm_Pin motorPin);
+	explicit Motor(tpm_Pin motorPin,dsf_GPIO_ocp rotationRight,dsf_GPIO_ocp rotationLeft);
 //	virtual ~Motor();
 //	void setupMotor(tpm_Pin motorPin, dsf_GPIO_ocp _inDriveRight, dsf_GPIO_ocp _inDriveLeft);
 
@@ -29,10 +29,14 @@ public:
 	void setDriverInputs(dsf_GPIO_ocp _inDriveRight, dsf_GPIO_ocp _inDriveLeft);
 	void setRotation();
 	void setControl(uint32_t inputOrigin);
-	void setSpeed();
+	void setSpeed(int duty);
+
+	mkl_TPMPulseWidthModulation getPWM();
 
 	void powerConfig();
 	void enableDisablePower(bool inputBtn);
+	void keepEnable(bool on);
+	void disable();
 private:
 	mkl_TPMPulseWidthModulation motor;
 	dsf_GPIO_ocp inDriveRight, inDriveLeft;

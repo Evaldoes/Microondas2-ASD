@@ -33,15 +33,15 @@ void Led::switchState(bool pression) {
 	switch (status) {
 	case isOff:
 		if (pression) {
-			ledPin.toogleBit();
+			ledPin.writeBit(1);
+			status = isOn;
 		}
-		status = isOn;
 		break;
 	case isOn:
 		if (pression) {
-			ledPin.toogleBit();
+			ledPin.writeBit(0);
+			status = isOff;
 		}
-		status = isOff;
 		break;
 	default:
 		break;

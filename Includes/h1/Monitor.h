@@ -26,7 +26,10 @@ public:
 			SinalizationServiceController _sinalizationCtrl,
 			MotorServiceController _motorCtrl);
 	virtual ~Monitor();
-	void readInputs();
+	void readInputs(operationStates situation);
+	void doStandBy(),doOperating(),doPaused();
+	void setState(operationStates operationState);
+	operationStates getState();
 private:
 	DebouncedButton startPause, cancel, endOp;
 	operationStates status;

@@ -9,10 +9,10 @@
 
 MotorServiceController::MotorServiceController(){}
 
-MotorServiceController::MotorServiceController(Motor * _hBridgeAcess) {
+MotorServiceController::MotorServiceController(Motor  _hBridgeAcess) {
 	// TODO Auto-generated constructor stub
 	hBridgeAcess = _hBridgeAcess;
-	hBridgeAcess->powerConfig();
+	hBridgeAcess.powerConfig();
 	actualState = waitingWheel;
 }
 
@@ -21,6 +21,12 @@ MotorServiceController::~MotorServiceController() {
 }
 
 void MotorServiceController::enableDisablePower(bool inputBtn) {
-	actualState = (actualState == waitingWheel) ? workingWheel : waitingWheel;
-	hBridgeAcess->enableDisablePower(inputBtn);
+	if (inputBtn)
+		actualState = (actualState == waitingWheel) ? workingWheel : waitingWheel;
+
+	hBridgeAcess.enableDisablePower(inputBtn);
+}
+
+Motor MotorServiceController::getMotor() {
+	return hBridgeAcess;
 }

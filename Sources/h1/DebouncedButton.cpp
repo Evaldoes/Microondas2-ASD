@@ -33,7 +33,7 @@ dsf_GPIO_ocp DebouncedButton::getButtonPin() {
  * Get the current state
  */
 bool DebouncedButton::getActivity() {
-	mkl_TPMDelay delay(tpm_TPMNumberMask::tpm_TPM0);
+	mkl_TPMDelay delay(tpm_TPMNumberMask::tpm_TPM1);
 	delay.setFrequency(tpm_Div::tpm_div128);
 
 	if(_pinBtt.readBit() == 1) {

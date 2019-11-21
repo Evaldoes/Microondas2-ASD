@@ -24,6 +24,7 @@ public:
 	virtual ~SinalizationServiceController();
 	bool isDoorClosed();
 	void callEndOfOperation();
+	dsf_GPIO_ocp getDoorLed();
 private:
 	dsf_GPIO_ocp buzzer, doorSensor, doorLed;
 

@@ -22,15 +22,18 @@ SinalizationServiceController::SinalizationServiceController(dsf_GPIO_ocp _buzze
 	buzzer = _buzzer;
 	doorSensor = _doorSensor;
 	doorLed = _doorLed;
-	buzzer.writeBit(0);
+	buzzer.writeBit(1);
 }
 
 bool SinalizationServiceController::isDoorClosed() {
 	if (doorSensor.readBit() == 1) {
 		return false;
 	}
-	doorLed.writeBit(0);
 	return true;
+}
+
+dsf_GPIO_ocp SinalizationServiceController::getDoorLed() {
+	return doorLed;
 }
 
 void SinalizationServiceController::callEndOfOperation() {
@@ -40,6 +43,6 @@ void SinalizationServiceController::callEndOfOperation() {
 	buzzer.writeBit(1);
 	delay.waitDelay(0xFFFF);
 	delay.waitDelay(0xFFFF);
-	delay.waitDelay(0xFFFF);
 	buzzer.writeBit(0);
+	doorLed.writeBit(0);
 }

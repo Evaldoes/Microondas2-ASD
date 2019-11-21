@@ -18,11 +18,13 @@ enum StatusMotor {
 class MotorServiceController {
 public:
 	MotorServiceController();
-	MotorServiceController(Motor * _hBridgeAcess);
+	MotorServiceController(Motor _hBridgeAcess);
 	virtual ~MotorServiceController();
 	void enableDisablePower(bool inputBtn);
+	Motor getMotor();
+
 private:
-	Motor * hBridgeAcess;
+	Motor hBridgeAcess;
 	StatusMotor actualState;
 };
 

@@ -10,12 +10,20 @@
 #include "h1/mkl_TPMPulseWidthModulation.h"
 #include "h1/dsf_GPIO_ocp.h"
 
-Motor::Motor() {operation = waitOp;}
+Motor::Motor() {}
+
+Motor::Motor(tpm_Pin motorPin,dsf_GPIO_ocp rotationRight, dsf_GPIO_ocp rotationLeft) {
+	mkl_TPMPulseWidthModulation motorConstructor(motorPin);
+	motor = motorConstructor;
+	motor.setFrequency(tpm_div16, 999);
+
+	setDriverInputs(rotationRight,rotationLeft);
+	control = 0;
+}
 
 void Motor::setPWMPin(tpm_Pin pin) {
 	mkl_TPMPulseWidthModulation motorConstructor(pin);
 	motor = motorConstructor;
-	motor.setFrequency(tpm_div16, 999);
 	control = 0;
 
 }
@@ -50,19 +58,16 @@ void Motor::setRotation() {
 	}
 }
 
-void Motor::setSpeed(){
-	if (control == 0) {
-		motor.setDutyCycle(0);
-	}
-	else {
-		motor.setDutyCycle(600);
-	}
+void Motor::setSpeed(int duty){
+	motor.setDutyCycle(duty);
 }
 
 void Motor::powerConfig() {
 	setControl(0);
+	motor.setFrequency(tpm_div16, 999);
 	setRotation();
-	setSpeed();
+	setSpeed(900);
+//	operation = waitOp;
 }
 
 void Motor::enableDisablePower(bool inputBtn) {
@@ -80,4 +85,23 @@ void Motor::enableDisablePower(bool inputBtn) {
 		}
 		break;
 	}
+}
+mkl_TPMPulseWidthModulation Motor::getPWM() {
+	return motor;
+}
+
+void Motor::keepEnable(bool on) {
+	if (on) {
+//		setRotation();
+		motor.enableOperation();
+	}
+	else {
+		motor.disableOperation();
+	}
+}
+
+void Motor::disable() {
+	motor.setDutyCycle(0);
+	motor.enableOperation();
+//	motor.disableOperation();
 }
