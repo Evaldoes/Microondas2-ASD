@@ -9,7 +9,7 @@
 #define SOURCES_H1_MONITOR_H_
 
 #include "h1/DebouncedButton.h"
-#include "h1/dsf_GPIO_ocp.h"
+#include "h1/mkl_GPIOPort.h"
 #include "h1/Motor.h"
 
 #include "h1/SinalizationServiceController.h"
@@ -24,7 +24,7 @@ class Monitor {
 public:
 	Monitor(DebouncedButton _startPause, DebouncedButton _cancel, DebouncedButton _endOp,
 			SinalizationServiceController _sinalizationCtrl,
-			MotorServiceController _motorCtrl);
+			MotorServiceController _motorCtrl, mkl_GPIOPort _ledOp);
 	virtual ~Monitor();
 	void readInputs(operationStates situation);
 	void doStandBy(),doOperating(),doPaused();
@@ -36,6 +36,8 @@ private:
 
 	SinalizationServiceController sinalizationCtrl;
 	MotorServiceController motorCtrl;
+
+	mkl_GPIOPort ledOp;
 
 };
 

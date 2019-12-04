@@ -10,6 +10,7 @@
 
 #include <stdint.h>
 #include "dsf_GPIO_ocp.h"
+#include "h1/mkl_GPIOPort.h"
 #include "mkl_TPM.h"
 #include "mkl_TPMDelay.h"
 //
@@ -20,9 +21,9 @@ class DebouncedButton
 {
 public:
 	DebouncedButton();
-	DebouncedButton(GPIO_t::dsf_GPIO GPIOName, GPIO_t::dsf_Pin pin, PullResistor_t::dsf_PullResistor pullResistor);
+	DebouncedButton(gpio_Pin GPIOName, gpio_PullResistor pullResistor);
 	bool getActivity();
-	dsf_GPIO_ocp getButtonPin();
+	mkl_GPIOPort getButtonPin();
 
 	enum activity {
 		notPressed = false,
@@ -30,8 +31,8 @@ public:
 	};
 
 private:
-	activity status;
-	dsf_GPIO_ocp _pinBtt;
+	bool status;
+	mkl_GPIOPort _pinBtt;
 };
 
 

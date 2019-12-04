@@ -12,7 +12,7 @@
 
 Motor::Motor() {}
 
-Motor::Motor(tpm_Pin motorPin,dsf_GPIO_ocp rotationRight, dsf_GPIO_ocp rotationLeft) {
+Motor::Motor(tpm_Pin motorPin,mkl_GPIOPort rotationRight, mkl_GPIOPort rotationLeft) {
 	mkl_TPMPulseWidthModulation motorConstructor(motorPin);
 	motor = motorConstructor;
 	motor.setFrequency(tpm_div16, 999);
@@ -37,7 +37,7 @@ void Motor::setPWMPin(tpm_Pin pin) {
 //	motor.setFrequency(tpm_div16, 999);
 //}
 
-void Motor::setDriverInputs(dsf_GPIO_ocp _inDriveRight, dsf_GPIO_ocp _inDriveLeft) {
+void Motor::setDriverInputs(mkl_GPIOPort _inDriveRight, mkl_GPIOPort _inDriveLeft) {
 	inDriveRight = _inDriveRight;
 	inDriveLeft = _inDriveLeft;
 }

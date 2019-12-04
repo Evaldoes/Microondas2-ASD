@@ -10,7 +10,10 @@
 
 #include "mkl_TPMPulseWidthModulation.h"
 #include <stdint.h>
+
 #include "dsf_GPIO_ocp.h"
+#include "h1/mkl_GPIOPort.h"
+
 #include "mkl_TPM.h"
 
 enum pwmPower {
@@ -21,12 +24,12 @@ enum pwmPower {
 class Motor {
 public:
 	Motor();
-	explicit Motor(tpm_Pin motorPin,dsf_GPIO_ocp rotationRight,dsf_GPIO_ocp rotationLeft);
+	explicit Motor(tpm_Pin motorPin,mkl_GPIOPort rotationRight,mkl_GPIOPort rotationLeft);
 //	virtual ~Motor();
 //	void setupMotor(tpm_Pin motorPin, dsf_GPIO_ocp _inDriveRight, dsf_GPIO_ocp _inDriveLeft);
 
 	void setPWMPin(tpm_Pin pin);
-	void setDriverInputs(dsf_GPIO_ocp _inDriveRight, dsf_GPIO_ocp _inDriveLeft);
+	void setDriverInputs(mkl_GPIOPort _inDriveRight, mkl_GPIOPort _inDriveLeft);
 	void setRotation();
 	void setControl(uint32_t inputOrigin);
 	void setSpeed(int duty);
@@ -39,7 +42,7 @@ public:
 	void disable();
 private:
 	mkl_TPMPulseWidthModulation motor;
-	dsf_GPIO_ocp inDriveRight, inDriveLeft;
+	mkl_GPIOPort inDriveRight, inDriveLeft;
 	uint32_t control;
 	bool clockWiseRotation;
 	pwmPower operation;

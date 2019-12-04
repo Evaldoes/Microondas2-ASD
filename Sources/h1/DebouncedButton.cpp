@@ -20,12 +20,12 @@ DebouncedButton::DebouncedButton() {
 
 }
 
-DebouncedButton::DebouncedButton(GPIO_t::dsf_GPIO GPIOName, GPIO_t::dsf_Pin pin, PullResistor_t::dsf_PullResistor pullResistor) {
-	_pinBtt.setupPin(GPIOName,pin);
+DebouncedButton::DebouncedButton(gpio_Pin GPIOName, gpio_PullResistor pullResistor) {
+	_pinBtt.setPin(GPIOName);
 	_pinBtt.setPullResistor(pullResistor);
 }
 
-dsf_GPIO_ocp DebouncedButton::getButtonPin() {
+mkl_GPIOPort DebouncedButton::getButtonPin() {
 	return _pinBtt;
 }
 
@@ -38,11 +38,14 @@ bool DebouncedButton::getActivity() {
 
 	if(_pinBtt.readBit() == 1) {
 		delay.waitDelay(0xFFFF);
-		status = pressed;
+		delay.waitDelay(0xFFFF);
+		delay.waitDelay(0xFF);
+		return true;
 	}
-	else {
-		status = notPressed;
-	}
-	return status;
+	return false;
+//	else {
+//		status = false;
+//	}
+//	return status;
 }
 

@@ -31,7 +31,10 @@
 #include <stdint.h>
 
 #include "MKL25Z4.h"
+
 #include "h1/dsf_GPIO_ocp.h"
+#include "h1/mkl_GPIOPort.h"
+
 #include "h1/mkl_TPMDelay.h"
 #include "h1/mkl_TPMPulseWidthModulation.h"
 #include "h1/Led.h"
@@ -51,32 +54,33 @@
 
 // BOTOES
 
-DebouncedButton startPause_Btn(GPIO_t::dsf_GPIOC,GPIO_t::dsf_PTC1,PullResistor_t::PullUpResistor);
-DebouncedButton cancel_Btn(GPIO_t::dsf_GPIOE,GPIO_t::dsf_PTE29,PullResistor_t::PullUpResistor);
-DebouncedButton endOperation_Btn(GPIO_t::dsf_GPIOC,GPIO_t::dsf_PTC2,PullResistor_t::PullUpResistor);
+DebouncedButton startPause_Btn(gpio_Pin::gpio_PTC1,gpio_PullResistor::gpio_pullUpResistor); //   GPIO_t::dsf_GPIOC,GPIO_t::dsf_PTC1,PullResistor_t::PullUpResistor);
+DebouncedButton cancel_Btn(gpio_Pin::gpio_PTB3,gpio_PullResistor::gpio_pullUpResistor);		//GPIO_t::dsf_GPIOE,GPIO_t::dsf_PTE29,PullResistor_t::PullUpResistor);
+DebouncedButton endOperation_Btn(gpio_Pin::gpio_PTE23,gpio_PullResistor::gpio_pullUpResistor);		//GPIO_t::dsf_GPIOC,GPIO_t::dsf_PTC2,PullResistor_t::PullUpResistor);
 
 ////// SINALIZADORES
 
-dsf_GPIO_ocp door_Key(GPIO_t::dsf_GPIOC,GPIO_t::dsf_PTC7);
-dsf_GPIO_ocp ledDoor(GPIO_t::dsf_GPIOA,GPIO_t::dsf_PTA1);
-dsf_GPIO_ocp buzzer(GPIO_t::dsf_GPIOB,GPIO_t::dsf_PTB19);
+mkl_GPIOPort door_Key(gpio_Pin::gpio_PTC7);		//GPIO_t::dsf_GPIOC,GPIO_t::dsf_PTC7);
+mkl_GPIOPort ledDoor(gpio_Pin::gpio_PTA1);		//GPIO_t::dsf_GPIOA,GPIO_t::dsf_PTA1);
+mkl_GPIOPort ledOp(gpio_Pin::gpio_PTB18);
+mkl_GPIOPort buzzer(gpio_Pin::gpio_PTA2);		//GPIO_t::dsf_GPIOB,GPIO_t::dsf_PTB19);
 
 ////// DIRECIONAIS MOTOR
 
-dsf_GPIO_ocp inDriverRight(GPIO_t::dsf_GPIOC, GPIO_t::dsf_PTC13);
-dsf_GPIO_ocp inDriverLeft(GPIO_t::dsf_GPIOC, GPIO_t::dsf_PTC12);
+mkl_GPIOPort inDriverRight(gpio_Pin::gpio_PTC13);		//GPIO_t::dsf_GPIOC, GPIO_t::dsf_PTC13);
+mkl_GPIOPort inDriverLeft(gpio_Pin::gpio_PTC12);		//GPIO_t::dsf_GPIOC, GPIO_t::dsf_PTC12);
 
 void setup(){
 
-	door_Key.setPortMode(PortMode_t::Input);
-	ledDoor.setPortMode(PortMode_t::Output);
-	buzzer.setPortMode(PortMode_t::Output);
-	ledDoor.writeBit(0);
-	buzzer.writeBit(0);
+	door_Key.setPortMode(gpio_PortMode::gpio_output);		//PortMode_t::Input);
+	ledDoor.setPortMode(gpio_PortMode::gpio_output);
+	ledOp.setPortMode(gpio_PortMode::gpio_output);
+	buzzer.setPortMode(gpio_PortMode::gpio_output);
 
-	inDriverRight.setPortMode(PortMode_t::Output);
-	inDriverLeft.setPortMode(PortMode_t::Output);
+	inDriverRight.setPortMode(gpio_PortMode::gpio_output);
+	inDriverLeft.setPortMode(gpio_PortMode::gpio_output);
 
+	ledOp.writeBit(0);
 }
 
 int main(void)
@@ -88,7 +92,7 @@ int main(void)
 	SinalizationServiceController sinalizationController(buzzer,door_Key,ledDoor);
 	MotorServiceController motorController(motorPeripheral);
 
-	Monitor monitor(startPause_Btn,cancel_Btn,endOperation_Btn,sinalizationController,motorController);
+	Monitor monitor(startPause_Btn,cancel_Btn,endOperation_Btn,sinalizationController,motorController, ledOp);
 	int teste = 0;
 
 	while (true) {

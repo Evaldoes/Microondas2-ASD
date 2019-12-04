@@ -10,6 +10,7 @@
 
 #include "h1/DebouncedButton.h"
 #include "h1/dsf_GPIO_ocp.h"
+#include "h1/mkl_GPIOPort.h"
 
 enum StatusSinalization {
 	waitDoor,
@@ -19,14 +20,14 @@ enum StatusSinalization {
 class SinalizationServiceController {
 public:
 	SinalizationServiceController();
-	SinalizationServiceController(dsf_GPIO_ocp _buzzer, dsf_GPIO_ocp _doorSensor,
-			dsf_GPIO_ocp _doorLed);
+	SinalizationServiceController(mkl_GPIOPort _buzzer, mkl_GPIOPort _doorSensor,
+			mkl_GPIOPort _doorLed);
 	virtual ~SinalizationServiceController();
 	bool isDoorClosed();
 	void callEndOfOperation();
-	dsf_GPIO_ocp getDoorLed();
+	mkl_GPIOPort getDoorLed();
 private:
-	dsf_GPIO_ocp buzzer, doorSensor, doorLed;
+	mkl_GPIOPort buzzer, doorSensor, doorLed;
 
 };
 
