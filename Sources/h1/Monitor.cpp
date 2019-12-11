@@ -54,40 +54,35 @@ void Monitor::readInputs(operationStates situation) {
 void Monitor::doStandBy() {
 	motorCtrl.getMotor().disable();
 	if (sinalizationCtrl.isDoorClosed()) {
-		sinalizationCtrl.getDoorLed().writeBit(0);
 		if (startPause.getActivity()) {
 			status = operating;
 		}
 	}
-	else {sinalizationCtrl.getDoorLed().writeBit(1);}
 }
 
 void Monitor::doOperating(){
 	motorCtrl.getMotor().powerConfig();
 	motorCtrl.getMotor().keepEnable(true);
 	if (sinalizationCtrl.isDoorClosed()) {
-		sinalizationCtrl.getDoorLed().writeBit(0);
 		if (startPause.getActivity()) {
 			status = paused;
 		}
-		else if (cancel.getActivity()) {
+		if (cancel.getActivity()) {
 			status = standby;
 		}
-		else if (endOp.getActivity()) {
+		if (endOp.getActivity()) {
 			motorCtrl.getMotor().disable();
 			sinalizationCtrl.callEndOfOperation();
 			status = standby;
 		}
 	}
 	else {
-		sinalizationCtrl.getDoorLed().writeBit(1);
 		status = paused;
 	}
 }
 
 void Monitor::doPaused() {
 	if (sinalizationCtrl.isDoorClosed()) {
-		sinalizationCtrl.getDoorLed().writeBit(0);
 		if (startPause.getActivity()) {
 			status = operating;
 		}

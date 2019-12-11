@@ -27,8 +27,10 @@ SinalizationServiceController::SinalizationServiceController(mkl_GPIOPort _buzze
 
 bool SinalizationServiceController::isDoorClosed() {
 	if (doorSensor.readBit() == 1) {
+		doorLed.writeBit(1);
 		return false;
 	}
+	doorLed.writeBit(0);
 	return true;
 }
 
@@ -42,7 +44,7 @@ void SinalizationServiceController::callEndOfOperation() {
 	delay.waitDelay(0xFFFF);
 	delay.waitDelay(0xFFFF);
 	delay.waitDelay(0xFFFF);
-	delay.waitDelay(0xFFFF);
+	delay.waitDelay(0xFF);
 	doorLed.writeBit(1);
 	buzzer.writeBit(1);
 	delay.waitDelay(0xFFFF);

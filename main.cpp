@@ -55,14 +55,14 @@
 // BOTOES
 
 DebouncedButton startPause_Btn(gpio_Pin::gpio_PTC1,gpio_PullResistor::gpio_pullUpResistor); //   GPIO_t::dsf_GPIOC,GPIO_t::dsf_PTC1,PullResistor_t::PullUpResistor);
-DebouncedButton cancel_Btn(gpio_Pin::gpio_PTB3,gpio_PullResistor::gpio_pullUpResistor);		//GPIO_t::dsf_GPIOE,GPIO_t::dsf_PTE29,PullResistor_t::PullUpResistor);
-DebouncedButton endOperation_Btn(gpio_Pin::gpio_PTE23,gpio_PullResistor::gpio_pullUpResistor);		//GPIO_t::dsf_GPIOC,GPIO_t::dsf_PTC2,PullResistor_t::PullUpResistor);
+DebouncedButton cancel_Btn(gpio_Pin::gpio_PTC2,gpio_PullResistor::gpio_pullUpResistor);		//GPIO_t::dsf_GPIOE,GPIO_t::dsf_PTE29,PullResistor_t::PullUpResistor);
+DebouncedButton endOperation_Btn(gpio_Pin::gpio_PTE29,gpio_PullResistor::gpio_pullUpResistor);		//GPIO_t::dsf_GPIOC,GPIO_t::dsf_PTC2,PullResistor_t::PullUpResistor);
 
 ////// SINALIZADORES
 
 mkl_GPIOPort door_Key(gpio_Pin::gpio_PTC7);		//GPIO_t::dsf_GPIOC,GPIO_t::dsf_PTC7);
 mkl_GPIOPort ledDoor(gpio_Pin::gpio_PTA1);		//GPIO_t::dsf_GPIOA,GPIO_t::dsf_PTA1);
-mkl_GPIOPort ledOp(gpio_Pin::gpio_PTB18);
+mkl_GPIOPort ledOp(gpio_Pin::gpio_PTB19);
 mkl_GPIOPort buzzer(gpio_Pin::gpio_PTA2);		//GPIO_t::dsf_GPIOB,GPIO_t::dsf_PTB19);
 
 ////// DIRECIONAIS MOTOR

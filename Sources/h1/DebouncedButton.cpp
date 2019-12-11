@@ -36,16 +36,12 @@ bool DebouncedButton::getActivity() {
 	mkl_TPMDelay delay(tpm_TPMNumberMask::tpm_TPM1);
 	delay.setFrequency(tpm_Div::tpm_div128);
 
-	if(_pinBtt.readBit() == 1) {
+	if(_pinBtt.readBit() == 0) {
 		delay.waitDelay(0xFFFF);
 		delay.waitDelay(0xFFFF);
-		delay.waitDelay(0xFF);
+		delay.waitDelay(0xFFF);
 		return true;
 	}
 	return false;
-//	else {
-//		status = false;
-//	}
-//	return status;
 }
 
