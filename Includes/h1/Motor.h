@@ -8,13 +8,10 @@
 #ifndef SOURCES_H1_MOTOR_H_
 #define SOURCES_H1_MOTOR_H_
 
-#include "mkl_TPMPulseWidthModulation.h"
+#include "base/mkl_GPIOPort.h"
+#include "base/mkl_TPMPulseWidthModulation.h"
+
 #include <stdint.h>
-
-#include "dsf_GPIO_ocp.h"
-#include "h1/mkl_GPIOPort.h"
-
-#include "mkl_TPM.h"
 
 enum pwmPower {
 	waitOp = false,

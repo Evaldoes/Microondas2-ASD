@@ -1,13 +1,13 @@
 #include <stdint.h>
 #include <MKL25Z4.h>
-#include "teclado/mkl_KeyboardParallelPort.h"
-#include "bibliotecas/mkl_SystickPeriodicInterrupt.h"
-#include "dispositivos/led.h"
-#include "dispositivos/switch.h"
-#include "dispositivos/displaySegments.h"
-#include "servicos/EditService.h"
-#include "dispositivos/button.h"
-#include "servicos/IncrementService.h"
+#include "base/mkl_KeyboardParallelPort.h"
+#include "base/mkl_SystickPeriodicInterrupt.h"
+#include "h2/led.h"
+#include "h2/switch.h"
+#include "h2/displaySegments.h"
+#include "h2/EditService.h"
+#include "h2/button.h"
+#include "h2/IncrementService.h"
 
 mkl_KeyboardParallelPort keyboard(gpio_PTA13, gpio_PTD5, gpio_PTD0, gpio_PTD2,
 gpio_PTC12, gpio_PTC13, gpio_PTC16, gpio_PTC17); // Pinagem para o teclado

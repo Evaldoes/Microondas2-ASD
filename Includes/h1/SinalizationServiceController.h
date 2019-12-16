@@ -8,9 +8,8 @@
 #ifndef SOURCES_H1_SINALIZATIONSERVICECONTROLLER_H_
 #define SOURCES_H1_SINALIZATIONSERVICECONTROLLER_H_
 
-#include "h1/DebouncedButton.h"
-#include "h1/dsf_GPIO_ocp.h"
-#include "h1/mkl_GPIOPort.h"
+#include "base/DebouncedButton.h"
+//#include "h1/mkl_GPIOPort.h"
 
 enum StatusSinalization {
 	waitDoor,

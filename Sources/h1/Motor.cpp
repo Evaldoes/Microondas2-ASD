@@ -6,9 +6,6 @@
  */
 
 #include "h1/Motor.h"
-#include "h1/mkl_TPM.h"
-#include "h1/mkl_TPMPulseWidthModulation.h"
-#include "h1/dsf_GPIO_ocp.h"
 
 Motor::Motor() {}
 

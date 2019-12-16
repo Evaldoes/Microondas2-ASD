@@ -39,7 +39,7 @@
  * @htmlonly    http://www.gnu.org/copyleft/gpl.html
  */
 
-#include "h1/mkl_GPIOPort.h"
+#include "base/mkl_GPIOPort.h"
 
 /*!
  *   @fn       mkl_GPIOPort

@@ -30,23 +30,26 @@
 
 #include <stdint.h>
 
+// SDK PLACA
 #include "MKL25Z4.h"
 
-#include "h1/dsf_GPIO_ocp.h"
-#include "h1/mkl_GPIOPort.h"
 
-#include "h1/mkl_TPMDelay.h"
-#include "h1/mkl_TPMPulseWidthModulation.h"
+//FRAMEWORK E DEBOUNCE PARA AS HISTORIAS
+#include "base/mkl_GPIOPort.h"
+#include "base/mkl_TPMDelay.h"
+#include "base/mkl_TPMPulseWidthModulation.h"
+#include "base/DebouncedButton.h"
+
+
+// CLASSES DIGITAIS
 #include "h1/Led.h"
-#include "h1/DebouncedButton.h"
 #include "h1/Motor.h"
 
+
+// CLASSES DE SERVICO E MONITORES
 #include "h1/Monitor.h"
 #include "h1/SinalizationServiceController.h"
 #include "h1/MotorServiceController.h"
-
-#define LOW 0
-#define HIGH 1
 
 /*
  * Criacao dos objetos perifericos

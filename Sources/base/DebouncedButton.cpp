@@ -5,10 +5,7 @@
  *      Author: caiotelles
  */
 
-#include "h1/DebouncedButton.h"
-#include "h1/dsf_GPIO_ocp.h"
-#include "h1/mkl_TPM.h"
-#include "h1/mkl_TPMDelay.h"
+#include "base/DebouncedButton.h"
 
 #define LOW 0
 #define HIGH 1
