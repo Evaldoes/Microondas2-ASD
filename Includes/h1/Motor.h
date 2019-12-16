@@ -40,12 +40,12 @@ public:
 	void enableDisablePower(bool inputBtn);
 	void keepEnable(bool on);
 	void disable();
+	pwmPower operation;
 private:
 	mkl_TPMPulseWidthModulation motor;
 	mkl_GPIOPort inDriveRight, inDriveLeft;
 	uint32_t control;
 	bool clockWiseRotation;
-	pwmPower operation;
 };
 
 #endif /* SOURCES_H1_MOTOR_H_ */

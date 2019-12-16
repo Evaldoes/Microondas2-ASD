@@ -95,13 +95,9 @@ void Motor::keepEnable(bool on) {
 //		setRotation();
 		motor.enableOperation();
 	}
-	else {
-		motor.disableOperation();
-	}
 }
 
 void Motor::disable() {
 	motor.setDutyCycle(0);
 	motor.enableOperation();
-//	motor.disableOperation();
 }
