@@ -185,7 +185,7 @@ int main(void)
 	SinalizationServiceController sinalizationController(buzzer,door_Key,ledDoor);
 	MotorServiceController motorController(motorPeripheral);
 
-	Monitor monitor(startPause_Btn,cancel_Btn,endOperation_Btn,sinalizationController,motorController, ledOp);
+	Monitor monitor(onOff_Btn,startPause_Btn,cancel_Btn,endOperation_Btn,sinalizationController,motorController, ledOp);
 	int teste = 0;
 
 	while (true) {

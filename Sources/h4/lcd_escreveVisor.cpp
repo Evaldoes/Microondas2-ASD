@@ -5,7 +5,7 @@
  *      Author: Nader Hauache
  */
 
-#include <lcd_escreveVisor.h>
+#include "h4/lcd_escreveVisor.h"
 
 /*!
  *   Endereço do módulo I2C utilizado

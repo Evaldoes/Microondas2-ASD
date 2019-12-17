@@ -5,7 +5,7 @@
  *      Author: Nader Hauache
  */
 
-#include <digTemp.h>
+#include "h4/digTemp.h"
 
 digTemp::digTemp() {
 	// TODO Auto-generated constructor stub

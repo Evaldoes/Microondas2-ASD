@@ -5,7 +5,7 @@
  *      Author: Nader Hauache
  */
 
-#include <srvTemp.h>
+#include "h4/srvTemp.h"
 
 digTemp temp;
 
