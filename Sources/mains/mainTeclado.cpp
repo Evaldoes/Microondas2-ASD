@@ -6,7 +6,6 @@
 #include "h2/switch.h"
 #include "h2/displaySegments.h"
 #include "h2/EditService.h"
-#include "h2/button.h"
 #include "h2/IncrementService.h"
 
 mkl_KeyboardParallelPort keyboard(gpio_PTA13, gpio_PTD5, gpio_PTD0, gpio_PTD2,
