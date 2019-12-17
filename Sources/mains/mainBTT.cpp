@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "h3/Monitor.h"
+#include "h3/MonitorLCD.h"
 sid_t estado;
 
 int main(){

@@ -25,6 +25,7 @@ registrador Dm(0);
 
 switche botao3(gpio_PTB9),botao7(gpio_PTB11); //Botões de incremento
 
+int tipoServico=-1; //Enviar o tipo de servico para o LCD
 
 switche permission(gpio_PTE5); //Botão que simulava a resposta da permissão do Temporizador
 
@@ -54,6 +55,15 @@ int main(){
 	setup();
 	while(1){
 		/*Serviço de edição*/
+		/*
+		 * Funções a serem adicionadas junto com o lcd para atualização dos dados
+		 *
+		 * service_edit.setTime(lcd.getDm, lcd.getUm, lcd.getDs, lcd.getUs, &Dm,&Um,&Ds,&Us);
+		 *
+		 * service_inc.setTime (lcd.getDm, lcd.getUm, lcd.getDs, lcd.getUs, &Dm,&Um,&Ds,&Us);
+		 *
+		 */
+
 		service_edit.maq_est(keyboard.keyIsPressed(),!permission.read());
 		service_edit.select_service();
 		service_edit.do_service(&Dm,&Um,&Ds,&Us,valor);
@@ -65,8 +75,23 @@ int main(){
 
     	/*Exibição no Display
     	 * (valores dos ponteiros passados como inteiros para
-    	 *  o display serão passados do mesmo jeito para LCD)*/
+    	 *  o display serão passados do mesmo jeito para LCD)
+    	 *  obs.: Essa função some com o lcd*/
     	display.monitora(Dm.leValor(),Um.leValor(),Ds.leValor(),Us.leValor());
+
+    	if(keyboard.keyIsPressed()){ //Quando há uso do teclado
+    		tipoServico = 0;	//Definido no typedef do LCD
+    	} else if(botao3.isOn()==1){ //Quando há uso do incremento 3
+    		tipoServico = 4;	//Definido no typedef do LCD
+    	} else if(botao7.isOn()==1){  //Quando há uso do incremento 7
+    		tipoServico = 6;	//Definido no typedef do LCD
+    	}
+
+    	/*
+    	 * Envia para o LCD no formato abaixo para exibição do tempo:
+    	 *
+    	 * lcd.setTime(Dm.leValor(),Um.leValor(),Ds.leValor(),Us.leValor(),tipoServico);
+    	 */
 
 
 	}

@@ -1,9 +1,9 @@
-#include "h3/Monitor.h"
+#include "h3/MonitorBtt.h"
 
 bool hasdata;
 int read;
 
-Monitor::Monitor(){
+MonitorBtt::MonitorBtt(){
 	ptrledon = new Led(gpio_PTB19);
 	ptrledoff = new Led(gpio_PTB18);
 	ptrledon->turnOff();
@@ -19,7 +19,7 @@ Monitor::Monitor(){
 	setup();
 }
 
-void Monitor::setup(){
+void MonitorBtt::setup(){
 	hasdata = false;
 	read = 0;
 	buff0 = 0;
@@ -30,12 +30,12 @@ void Monitor::setup(){
 	//sid = SemServico;
 }
 
-void Monitor::readInputs(){
+void MonitorBtt::readInputs(){
 	hasdata = bluetooth->wasData();
 	read = bluetooth->read();
 }
 
-sid_t Monitor::selectService(){
+sid_t MonitorBtt::selectService(){
 	if(hasdata == true){
 		switch(read){
 		case 'a':
@@ -63,7 +63,7 @@ sid_t Monitor::selectService(){
 	}
 }
 
-void Monitor::doService(sid_t next){
+void MonitorBtt::doService(sid_t next){
 	if(next == Cooking){
 		coz->doService(read);
 	}
@@ -72,7 +72,7 @@ void Monitor::doService(sid_t next){
 	}
 }
 
-void Monitor::writeOutputs(sid_t sid){
+void MonitorBtt::writeOutputs(sid_t sid){
 	if(sid == Cooking){
 		printf("%d\n",buff3);
 		printf("%d\n",buff2);

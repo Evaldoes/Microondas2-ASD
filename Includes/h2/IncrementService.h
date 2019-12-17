@@ -16,6 +16,7 @@ class IncrementService{
 public:
 
 	explicit IncrementService();
+	void setTime(int Dm, int Um,int Ds, int Us,registrador *four,registrador *three,registrador *two,registrador *one);
 	void recebeIncremento(registrador *reg4,registrador *reg3,registrador *reg2,registrador *reg1);
 	void machineState(bool b3, bool b7, bool arrived_permission);
 	void selectService();

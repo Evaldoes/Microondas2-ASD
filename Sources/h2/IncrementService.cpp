@@ -5,6 +5,13 @@ IncrementService::IncrementService(){
 	valueIncrement = 0;
 }
 
+void IncrementService::setTime(int Dm, int Um,int Ds, int Us,registrador *four,registrador *three,registrador *two,registrador *one){
+	four->atualiza(Dm);
+	three->atualiza(Um);
+	two->atualiza(Ds);
+	one->atualiza(Us);
+}
+
 void IncrementService::recebeIncremento(registrador *reg4,registrador *reg3,registrador *reg2,registrador *reg1) {
 	if(reg1->leValor() + valueIncrement > 9){
 		if(reg2->leValor() + 1 > 5) {

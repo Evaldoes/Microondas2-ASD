@@ -39,43 +39,129 @@
 #include "base/mkl_TPMDelay.h"
 #include "base/mkl_TPMPulseWidthModulation.h"
 #include "base/DebouncedButton.h"
+#include "base/mkl_KeyboardParallelPort.h"
+#include "base/mkl_SystickPeriodicInterrupt.h"
 
 
-// CLASSES DIGITAIS
-#include "h1/Led.h"
+//---------------------------------------------------------------------- MOTOR H1 ---------------------------------------------------
 #include "h1/Motor.h"
-
-
-// CLASSES DE SERVICO E MONITORES
 #include "h1/Monitor.h"
 #include "h1/SinalizationServiceController.h"
 #include "h1/MotorServiceController.h"
+
+
+//---------------------------------------------------------------------- TECLADO H2 -------------------------------------------------
+#include "h2/led.h"
+#include "h2/switch.h"
+#include "h2/displaySegments.h"
+#include "h2/EditService.h"
+#include "h2/IncrementService.h"
+
+
+//---------------------------------------------------------------------- BTT H3 ------------------------------------------------------
+#include "h3/MonitorBtt.h"
+
+
+//---------------------------------------------------------------------- LCD H4 ------------------------------------------------------
+#include "h4/srvShow.h"
+#include "h4/LED.h"
+#include "h4/temp_divFreq.h"
+#include "h4/srvTemp.h"
+#include "h4/types.h"
 
 /*
  * Criacao dos objetos perifericos
  */
 
 // BOTOES
+DebouncedButton onOff_Btn(gpio_Pin::gpio_PTA1,gpio_PullResistor::gpio_pullUpResistor);
+DebouncedButton startPause_Btn(gpio_Pin::gpio_PTC1,gpio_PullResistor::gpio_pullUpResistor);
+DebouncedButton cancel_Btn(gpio_Pin::gpio_PTC2,gpio_PullResistor::gpio_pullUpResistor);
+DebouncedButton endOperation_Btn(gpio_Pin::gpio_PTE29,gpio_PullResistor::gpio_pullUpResistor);
 
-DebouncedButton startPause_Btn(gpio_Pin::gpio_PTC1,gpio_PullResistor::gpio_pullUpResistor); //   GPIO_t::dsf_GPIOC,GPIO_t::dsf_PTC1,PullResistor_t::PullUpResistor);
-DebouncedButton cancel_Btn(gpio_Pin::gpio_PTC2,gpio_PullResistor::gpio_pullUpResistor);		//GPIO_t::dsf_GPIOE,GPIO_t::dsf_PTE29,PullResistor_t::PullUpResistor);
-DebouncedButton endOperation_Btn(gpio_Pin::gpio_PTE29,gpio_PullResistor::gpio_pullUpResistor);		//GPIO_t::dsf_GPIOC,GPIO_t::dsf_PTC2,PullResistor_t::PullUpResistor);
+DebouncedButton btnSum3(gpio_Pin::gpio_PTB9,gpio_PullResistor::gpio_pullUpResistor);
+DebouncedButton btnSum7(gpio_Pin::gpio_PTB11,gpio_PullResistor::gpio_pullUpResistor);
 
-////// SINALIZADORES
-
-mkl_GPIOPort door_Key(gpio_Pin::gpio_PTC7);		//GPIO_t::dsf_GPIOC,GPIO_t::dsf_PTC7);
-mkl_GPIOPort ledDoor(gpio_Pin::gpio_PTA1);		//GPIO_t::dsf_GPIOA,GPIO_t::dsf_PTA1);
+//
+mkl_GPIOPort door_Key(gpio_Pin::gpio_PTC7);
+mkl_GPIOPort ledDoor(gpio_Pin::gpio_PTA1);
 mkl_GPIOPort ledOp(gpio_Pin::gpio_PTB19);
-mkl_GPIOPort buzzer(gpio_Pin::gpio_PTA2);		//GPIO_t::dsf_GPIOB,GPIO_t::dsf_PTB19);
+mkl_GPIOPort buzzer(gpio_Pin::gpio_PTA2);
 
-////// DIRECIONAIS MOTOR
+mkl_KeyboardParallelPort keyboard(gpio_PTA13, gpio_PTD5, gpio_PTD0, gpio_PTD2,
+gpio_PTC12, gpio_PTC13, gpio_PTC16, gpio_PTC17); // Pinagem para o teclado
 
-mkl_GPIOPort inDriverRight(gpio_Pin::gpio_PTC13);		//GPIO_t::dsf_GPIOC, GPIO_t::dsf_PTC13);
-mkl_GPIOPort inDriverLeft(gpio_Pin::gpio_PTC12);		//GPIO_t::dsf_GPIOC, GPIO_t::dsf_PTC12);
+
+mkl_SystickPeriodicInterrupt systick = mkl_SystickPeriodicInterrupt(10, clock42Mhz);
+
+/*Registradores tipo Int, ponteiros*/
+registrador Us(0);
+registrador Ds(0);
+registrador Um(0);
+registrador Dm(0);
+
+//Serviços da História Teclado
+controlador service_edit;
+IncrementService service_inc;
+
+char key;
+int valor=0; //Conversão para Int
+
+// BTT
+sid_t estado;
+
+// LCD
+srvShow lcdm;
+srvTemp tempr;
+temp_divFreq f1Hz;
+int i = 0;
+
+LED redLed(gpio_PTB18);
+LED blueLed(gpio_PTD1);
+//LED greenLed(gpio_PTB19);
+
+
+extern "C" {
+    void SysTick_Handler(void) {
+    	keyboard.update();
+        key = keyboard.getKey();
+        if(keyboard.keyIsPressed()){
+        	valor=key;
+        }
+        else{
+        }
+
+        lcdm.printTime(tempr.int2Char(tempr.getMD()), tempr.int2Char(tempr.getMU()), tempr.int2Char(tempr.getSD()),
+            			tempr.int2Char(tempr.getSU()));
+        lcdm.printOp(off,on);
+
+        f1Hz.increment();
+
+        if(f1Hz.isCarryOut() == true && tempr.isExecute() == true){
+        	blueLed.turnOn();
+        	tempr.decrement();
+        	if(i < 40){
+        		i++;
+        	}
+
+        	if (i == 40){
+        		tempr.putPreCoz(pizza);
+        		lcdm.printCoz(pizza);
+        		i++;
+        	}
+        }
+
+        else{
+        	blueLed.turnOff();
+        }
+    }
+}
+
 
 void setup(){
 
-	door_Key.setPortMode(gpio_PortMode::gpio_output);		//PortMode_t::Input);
+	//---------------------------------------------------------------------- MOTOR H1 ---------------------------------------------------
+	door_Key.setPortMode(gpio_PortMode::gpio_output);
 	ledDoor.setPortMode(gpio_PortMode::gpio_output);
 	ledOp.setPortMode(gpio_PortMode::gpio_output);
 	buzzer.setPortMode(gpio_PortMode::gpio_output);
@@ -84,6 +170,10 @@ void setup(){
 	inDriverLeft.setPortMode(gpio_PortMode::gpio_output);
 
 	ledOp.writeBit(0);
+
+	//---------------------------------------------------------------------- TECLADO H2 -------------------------------------------------
+
+
 }
 
 int main(void)

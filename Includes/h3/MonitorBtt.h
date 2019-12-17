@@ -11,7 +11,7 @@ typedef enum{
 	Operation,
 }sid_t;
 
-class Monitor{
+class MonitorBtt{
 private:
 	//sid_t sid;
 	Led *ptrledon;//Led Verde
@@ -27,7 +27,7 @@ private:
 	int onoff;
 
 public:
-	Monitor();
+	MonitorBtt();
 	void setup();
 	void readInputs();
 	sid_t selectService();

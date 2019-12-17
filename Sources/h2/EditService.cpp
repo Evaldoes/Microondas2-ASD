@@ -7,7 +7,12 @@ controlador::controlador() {
 	finish=0;
 	contagem=0;
 }
-
+void controlador::setTime(int Dm, int Um,int Ds, int Us,registrador *four,registrador *three,registrador *two,registrador *one){
+	four->atualiza(Dm);
+	three->atualiza(Um);
+	two->atualiza(Ds);
+	one->atualiza(Us);
+}
 void controlador::maq_est(bool press, bool permission){
 	switch(atual){
 		case wait_for_full:

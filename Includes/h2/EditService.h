@@ -12,6 +12,7 @@ typedef enum{
 class controlador {
 	public:
 		explicit controlador();
+		void setTime(int Dm, int Um,int Ds, int Us,registrador *four,registrador *three,registrador *two,registrador *one);
 		void maq_est(bool press, bool permission);
 		void select_service();
 		void do_service(registrador *four,registrador *three,registrador *two,registrador *one, int key);
