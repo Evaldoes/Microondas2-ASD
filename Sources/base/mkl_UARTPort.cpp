@@ -41,7 +41,7 @@
  * @htmlonly    http://www.gnu.org/copyleft/gpl.html
  */
 
-#include "mkl_UARTPort.h"
+#include "base/mkl_UARTPort.h"
 
 mkl_UARTPort::mkl_UARTPort() {
     //! TODO(Felipe): implementar.

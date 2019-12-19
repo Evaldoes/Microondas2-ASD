@@ -9,7 +9,7 @@
 
 srvTemp tempo;
 srvShow lcd;
-LED redLed(gpio_PTB19);
+//LED redLed(gpio_PTB19);
 
 monitorLCD::monitorLCD() {
 	// TODO Auto-generated constructor stub
@@ -56,7 +56,7 @@ bool monitorLCD::setPreCoz(cozimentotype tipo){
 }
 
 bool monitorLCD::setState(bool door, bool valvespin){
-	lcd.printOp(door,valvespin);
+//	lcd.printOp(door,valvespin);
 }
 
 bool monitorLCD::printLCD(){
@@ -64,23 +64,23 @@ bool monitorLCD::printLCD(){
 }
 
 bool monitorLCD::play(){
-	tempo.play();
+	return tempo.play();
 }
 
 bool monitorLCD::pause(){
-	tempo.pause();
+	return tempo.pause();
 }
 
 bool monitorLCD::cancel(){
 	tempo.reset();
 	lcd.printTime('0','0','0','0');
 	lcd.printCoz(edicao);
-	redLed.turnOff();
+//	redLed.turnOff();
 }
 
 bool monitorLCD::ledEot(){
 	if (tempo.isEot() == true){
-		redLed.turnOn();
+//		redLed.turnOn();
 		return true;
 	}
 	else{

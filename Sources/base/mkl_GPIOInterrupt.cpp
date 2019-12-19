@@ -41,7 +41,7 @@
  * @htmlonly    http://www.gnu.org/copyleft/gpl.html
  */
 // CHANGE TO YOUR DIRECTORY!
-#include "mkl_GPIOInterrupt.h"
+#include "base/mkl_GPIOInterrupt.h"
 
 /*!
  *   @brief    Construtor padrão da classe.

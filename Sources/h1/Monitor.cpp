@@ -6,7 +6,6 @@
  */
 
 #include "h1/Monitor.h"
-#include "../../main.cpp"
 
 Monitor::Monitor(DebouncedButton _onOff,DebouncedButton _startPause, DebouncedButton _cancel, DebouncedButton _endOp,
 		SinalizationServiceController _sinalizationCtrl,MotorServiceController _motorCtrl, mkl_GPIOPort _ledOp) {
@@ -19,11 +18,13 @@ Monitor::Monitor(DebouncedButton _onOff,DebouncedButton _startPause, DebouncedBu
 	motorCtrl = _motorCtrl;
 	ledOp = _ledOp;
 
-	status = off;
+	status = offOp;
+
+	editingPermission = WAIT;
 }
 
 void Monitor::setKeyboardObjects(mkl_KeyboardParallelPort _keyboard, registrador _uS,registrador _uM,registrador _dS,
-			registrador _dM,controlador _editService,IncrementService _incService) {
+			registrador _dM,controlador _editService,IncrementService _incService, int _valor) {
 	keyboard = _keyboard;
 	uS = _uS;
 	uM = _uM;
@@ -31,34 +32,48 @@ void Monitor::setKeyboardObjects(mkl_KeyboardParallelPort _keyboard, registrador
 	dM = _dM;
 	editService = _editService;
 	incService = _incService;
+	valor = _valor;
+}
+
+//void Monitor::setBluetoothObjects(MonitorBtt _monitorBtt) {
+//	monitorBtt = _monitorBtt;
+//}
+
+void Monitor::setLCDObjects(srvShow _screenLCD, srvTemp _timerCounter, temp_divFreq _frequency) {
+	screenLCD = _screenLCD;
+	timerCounter = _timerCounter;
+	frequency = _frequency;
 }
 
 Monitor::~Monitor() {
 	// TODO Auto-generated destructor stub
 }
 
-operationStates Monitor::getState() {
+opStates Monitor::getState() {
 	return status;
 }
 
-void Monitor::setState(operationStates operationState) {
+void Monitor::setState(opStates operationState) {
 	status = operationState;
 }
 
-void Monitor::readInputs(operationStates situation) {
+void Monitor::readInputs(opStates situation) {
 	switch (situation) {
-	case off:
+	case offOp:
 		ledOp.writeBit(1);
 		doOff();
-	case standby:
+	case onOp:
+		ledOp.writeBit(1);
+		doOn();
+	case standbyOp:
 		ledOp.writeBit(1);
 		doStandBy();
 		break;
-	case operating:
+	case operatingOp:
 		ledOp.writeBit(0);
 		doOperating();
 		break;
-	case paused:
+	case pausedOp:
 		ledOp.writeBit(1);
 		doPaused();
 		break;
@@ -69,56 +84,87 @@ void Monitor::readInputs(operationStates situation) {
 
 void Monitor::doOff(){
 	if(onOff.getActivity()) {
-		status = standby;
+		status = onOp;
 	}
+}
+
+void Monitor::doOn() {
+	screenLCD.clean();
+	screenLCD.printOp(sinalizationCtrl.isDoorClosed(),off);
+	if (keyboard.keyIsPressed()){
+		status = standbyOp;
+		editingPermission = KBD;
+	}
+	else {
+//		monitorBtt.readInputs();
+//		estado = monitorBtt.selectService();
+//		if (estado != NoService) {
+//			status = standby;
+//			editingPermission = BTT;
+		}
+
 }
 
 void Monitor::doStandBy() {
 	motorCtrl.getMotor().disable();
+	screenLCD.clean();
+	screenLCD.printOp(sinalizationCtrl.isDoorClosed(),off);
+	if (editingPermission == KBD) {
+		screenLCD.printCoz(edicao);
+		editService.maq_est(true,true);
+		editService.select_service();
+		editService.do_service(&dM,&uM,&dS,&uS,valor);
+	}
+	else if (editingPermission == BTT) {
+//		monitorBtt.doService(estado);
+//		monitorBtt.writeOutputs(estado);
+	}
+
 	if (sinalizationCtrl.isDoorClosed()) {
 		if (startPause.getActivity()) {
-			status = operating;
+			status = operatingOp;
 		}
 	}
 	if (onOff.getActivity()) {
-		status = off;
+		status = onOp;
 	}
 }
 
 void Monitor::doOperating(){
 	motorCtrl.getMotor().powerConfig();
 	motorCtrl.getMotor().keepEnable(true);
+	timerCounter.play();
 	if (sinalizationCtrl.isDoorClosed()) {
 		if (startPause.getActivity()) {
-			status = paused;
+			status = pausedOp;
 		}
 		if (cancel.getActivity()) {
-			status = standby;
+			status = standbyOp;
 		}
-		if (endOp.getActivity()) {
+		if (timerCounter.isEot()) {
 			motorCtrl.getMotor().disable();
 			sinalizationCtrl.callEndOfOperation();
-			status = standby;
+			status = standbyOp;
 		}
 	}
 	else {
-		status = paused;
+		status = pausedOp;
 	}
 }
 
 void Monitor::doPaused() {
+	timerCounter.pause();
 	if (sinalizationCtrl.isDoorClosed()) {
 		if (startPause.getActivity()) {
-			status = operating;
+			status = operatingOp;
 		}
 		else if (cancel.getActivity()) {
-			status = standby;
+			status = standbyOp;
 		}
 	}
 	else {
-		sinalizationCtrl.getDoorLed().writeBit(1);
 		if (cancel.getActivity()) {
-			status = standby;
+			status = standbyOp;
 		}
 	}
 	motorCtrl.getMotor().disable();

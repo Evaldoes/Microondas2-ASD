@@ -1,5 +1,7 @@
 #include "h2/registrador.h"
 
+registrador::registrador(){}
+
 registrador::registrador(int valor){
 	valor=0;
 }

@@ -39,7 +39,7 @@
  *
  * @htmlonly    http://www.gnu.org/copyleft/gpl.html
  */
-#include "mkl_SystickPeriodicInterrupt.h"
+#include "base/mkl_SystickPeriodicInterrupt.h"
 
 /*!
  *   @fn		mkl_SystickPeriodicInterrupt

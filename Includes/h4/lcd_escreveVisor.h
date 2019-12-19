@@ -5,7 +5,7 @@
  *      Author: Nader Hauache
  */
 
-#include <mkl_LCD.h>
+#include "base/mkl_LCD.h"
 #include "types.h"
 
 #ifndef SOURCES_LCD_ESCREVEVISOR_H_
@@ -16,11 +16,11 @@ public:
 
 	lcd_escreveVisor();
 
-	void setup();
+	void setup(), config();
 
 	void escreveCozimento(cozimentotype tipo);
 
-	void escrevePorta(onOfftype boolean);
+	void escrevePorta(bool boolean);
 	void escreveValvula(onOfftype boolean);
 	void escreveGiro(onOfftype boolean);
 
@@ -28,6 +28,10 @@ public:
 	void escreveValvulaGiro(onOfftype boolean);
 
 	void escreveTempo(char MD, char MU, char SD, char SU);
+
+private:
+	mkl_LCD lcdVisor;
+	uint8_t deviceAddress = 0x27;
 
 };
 

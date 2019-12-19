@@ -16,6 +16,8 @@ class srvTemp {
 public:
 	srvTemp();
 
+	void config(digTemp _temp);
+
 	int getMD();
 	int getMU();
 	int getSD();
@@ -37,6 +39,7 @@ protected:
 	bool ocupaBT = false;
 	bool ocupaKB = false;
 	bool executando = false;
+	digTemp temp;
 };
 
 #endif /* SOURCES_SRVTEMP_H_ */

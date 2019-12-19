@@ -10,16 +10,25 @@
 /*!
  *   Endereço do módulo I2C utilizado
  */
-uint8_t deviceAddress = 0x27;
-
 /*!
  *   Configura e instancia o formato do display e os parametros do modulo I2C
  */
-mkl_LCD lcdVisor(mode2Lines, mode16Cols, mode5x8Dots, i2c_PTE1, i2c_PTE0,
-  deviceAddress);
+//mkl_LCD lcdVisor(mode2Lines, mode16Cols, mode5x8Dots, i2c_PTE1, i2c_PTE0,
+//  deviceAddress);
 
 lcd_escreveVisor::lcd_escreveVisor() {
 	// TODO Auto-generated constructor stub
+//	lcdVisor.config(mode2Lines, mode16Cols, mode5x8Dots, i2c_PTE1, i2c_PTE0, deviceAddress);
+//	lcdVisor.setBacklightOn();
+//	lcdVisor.setDisplayOn();
+//	lcdVisor.setCursorOff();
+//	lcdVisor.setBlinkOff();
+//	lcdVisor.clear();
+//	setup();
+}
+
+void lcd_escreveVisor::config() {
+	lcdVisor.config(mode2Lines, mode16Cols, mode5x8Dots, i2c_PTE1, i2c_PTE0, deviceAddress);
 	lcdVisor.setBacklightOn();
 	lcdVisor.setDisplayOn();
 	lcdVisor.setCursorOff();
@@ -81,18 +90,13 @@ void lcd_escreveVisor::escreveCozimento(cozimentotype tipo){
 	}
 }
 
-void lcd_escreveVisor::escrevePorta(onOfftype boolean){
+void lcd_escreveVisor::escrevePorta(bool boolean){
 	lcdVisor.setCursor(2,3);
-	switch (boolean){
-
-	case on:
-		lcdVisor.putString("ON ");
-		break;
-
-	case off:
-		lcdVisor.putString("OFF");
-		break;
-
+	if (!boolean) {
+		lcdVisor.putString("OP ");
+	}
+	else {
+		lcdVisor.putString("CL ");
 	}
 }
 

@@ -41,7 +41,7 @@
  * @htmlonly    http://www.gnu.org/copyleft/gpl.html
  */
 
-#include "mkl_HC06BluetoothSlave.h"
+#include "base/mkl_HC06BluetoothSlave.h"
 #include <cassert>
 #include <cstring>
 

@@ -1,6 +1,6 @@
 //#include "digitalFactory.h"
 #include "registrador.h"
-#include "decoder.h"
+#include "DecoderKBD.h"
 
 typedef enum{
 	wait_for_full2=0,

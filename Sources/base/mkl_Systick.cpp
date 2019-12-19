@@ -40,7 +40,7 @@
  * @htmlonly    http://www.gnu.org/copyleft/gpl.html
  */
 
-#include "mkl_Systick.h"
+#include "base/mkl_Systick.h"
 
 /*!
  *   @fn			setClockSource

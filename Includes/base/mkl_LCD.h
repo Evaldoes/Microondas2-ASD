@@ -142,10 +142,14 @@ class mkl_LCD {
   /*!
    * MÃ©todo de configuraÃ§Ã£o
    */
-  mkl_LCD(functionSetOption numLines, functionSetOption numCols,
+  mkl_LCD();
+   mkl_LCD(functionSetOption numLines, functionSetOption numCols,
     functionSetOption numPixels, i2c_Pin_t SCLPin, i2c_Pin_t SCAPin,
     uint8_t I2CAddress);
 
+  void config(functionSetOption numLines, functionSetOption numCols,
+		    functionSetOption numPixels, i2c_Pin_t SCLPin, i2c_Pin_t SCAPin,
+		    uint8_t I2CAddress);
   /*!
    * MÃ©todos de escrita
    */

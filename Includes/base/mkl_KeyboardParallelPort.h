@@ -45,7 +45,7 @@
 
 class mkl_KeyboardParallelPort{
  public:
-
+	mkl_KeyboardParallelPort();
 	mkl_KeyboardParallelPort(gpio_Pin pL0, gpio_Pin pL1, gpio_Pin pL2,gpio_Pin pL3, gpio_Pin pC0, gpio_Pin pC1, gpio_Pin pC2, gpio_Pin pC3);
 
 	 /*!

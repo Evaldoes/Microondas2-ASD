@@ -7,10 +7,15 @@
 
 #include "h4/srvShow.h"
 
-lcd_escreveVisor visor;
+//lcd_escreveVisor visor;
 
 srvShow::srvShow() {
 	// TODO Auto-generated constructor stub
+//	visor.config();
+}
+
+void srvShow::config(lcd_escreveVisor _visor){
+	visor = _visor;
 }
 
 char srvShow::castInt2Char(int number){
@@ -66,7 +71,7 @@ void srvShow::printTime(int MD, int MU, int SD, int SU){
 	visor.escreveTempo(M1,M2,S1,S2);
 }
 
-void srvShow::printOp(onOfftype porta, onOfftype valvulaGiro){
+void srvShow::printOp(bool porta, onOfftype valvulaGiro){
 	visor.escrevePorta(porta);
 	visor.escreveValvulaGiro(valvulaGiro);
 }

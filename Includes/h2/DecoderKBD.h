@@ -1,11 +1,11 @@
 #ifndef DECODER_H_
 #define DECODER_H_
 
-class Decoder {
+class DecoderKBD {
     private:
            int q;
     public:
-           Decoder ();
+           DecoderKBD ();
            void decode (bool b3, bool b7);
            int getQ ();
 };

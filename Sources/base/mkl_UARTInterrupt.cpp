@@ -41,7 +41,7 @@
  * @htmlonly    http://www.gnu.org/copyleft/gpl.html
  */
 
-#include "mkl_UARTInterrupt.h"
+#include "base/mkl_UARTInterrupt.h"
 #include <cassert>
 
 mkl_UARTInterrupt::mkl_UARTInterrupt() {

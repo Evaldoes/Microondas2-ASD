@@ -56,7 +56,7 @@
  *               - PDDR: Port Direct Input Register. Pág. 778.
  */
 
-#include "h1/mkl_GPIO.h"
+#include "base/mkl_GPIO.h"
 
 void mkl_GPIO::setPortMode(gpio_PortMode mode) {
   if (mode == gpio_input) {

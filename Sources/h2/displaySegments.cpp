@@ -1,4 +1,4 @@
-#include "displaySegments.h"
+#include "h2/displaySegments.h"
 
 
 mkl_TPMDelay tpm(tpm_TPM2);
@@ -157,7 +157,7 @@ void displaySegments::digito(int key, int position){
 }
 
 void displaySegments::monitora(int key1, int key2, int key3, int key4){
-	tpm.setFrequency(TPMDiv_t::Div1);
+	tpm.setFrequency(tpm_div128);
 	digito(key4,4);
 	tpm.waitDelay(0xFFFF);
 	digito(key3,3);

@@ -1,8 +1,9 @@
-#include "decoder.h"
-Decoder::Decoder(){
+#include "h2/DecoderKBD.h"
+
+DecoderKBD::DecoderKBD(){
          q = 0;
 }
-void Decoder::decode(bool b3, bool b7){
+void DecoderKBD::decode(bool b3, bool b7){
       if (b3 == 0 && b7 == 0) {
            q = 0;
       }
@@ -20,6 +21,6 @@ void Decoder::decode(bool b3, bool b7){
       }
 }
 
-int Decoder::getQ(){
+int DecoderKBD::getQ(){
 	return q;
 }

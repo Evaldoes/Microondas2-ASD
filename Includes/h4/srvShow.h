@@ -16,11 +16,15 @@
 class srvShow {
 public:
 	srvShow();
+	void config(lcd_escreveVisor _visor);
 	void printTime(int MD, int MU, int SD, int SU);
 	void printCoz(cozimentotype tipo);
-	void printOp(onOfftype porta, onOfftype valvulaGiro);
+	void printOp(bool porta, onOfftype valvulaGiro);
 	void clean();
 	char castInt2Char(int number);
+	bool editingPermission;
+private:
+	lcd_escreveVisor visor;
 };
 
 #endif /* SOURCES_SRVSHOW_H_ */

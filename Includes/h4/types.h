@@ -19,8 +19,8 @@ typedef enum{
 }cozimentotype;
 
 typedef enum {
-	on = 1,
-	off = 0
+	on = true,
+	off = false
 }onOfftype;
 
 typedef enum{

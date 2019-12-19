@@ -9,12 +9,12 @@
 
 Motor::Motor() {}
 
-Motor::Motor(tpm_Pin motorPin,mkl_GPIOPort rotationRight, mkl_GPIOPort rotationLeft) {
+Motor::Motor(tpm_Pin motorPin) {
 	mkl_TPMPulseWidthModulation motorConstructor(motorPin);
 	motor = motorConstructor;
 	motor.setFrequency(tpm_div16, 999);
 
-	setDriverInputs(rotationRight,rotationLeft);
+//	setDriverInputs(rotationRight,rotationLeft);
 	control = 0;
 }
 
@@ -34,25 +34,25 @@ void Motor::setPWMPin(tpm_Pin pin) {
 //	motor.setFrequency(tpm_div16, 999);
 //}
 
-void Motor::setDriverInputs(mkl_GPIOPort _inDriveRight, mkl_GPIOPort _inDriveLeft) {
-	inDriveRight = _inDriveRight;
-	inDriveLeft = _inDriveLeft;
-}
+//void Motor::setDriverInputs(mkl_GPIOPort _inDriveRight, mkl_GPIOPort _inDriveLeft) {
+//	inDriveRight = _inDriveRight;
+//	inDriveLeft = _inDriveLeft;
+//}
 
 void Motor::setControl(uint32_t inputOrigin) {
 	control = inputOrigin;
 }
 
 void Motor::setRotation() {
-	clockWiseRotation = (control == 0) ? true : false;
-	if (clockWiseRotation) {
-		inDriveRight.writeBit(1);
-		inDriveLeft.writeBit(0);
-	}
-	else {
-		inDriveRight.writeBit(0);
-		inDriveLeft.writeBit(1);
-	}
+//	clockWiseRotation = (control == 0) ? true : false;
+//	if (clockWiseRotation) {
+//		inDriveRight.writeBit(1);
+//		inDriveLeft.writeBit(0);
+//	}
+//	else {
+//		inDriveRight.writeBit(0);
+//		inDriveLeft.writeBit(1);
+//	}
 }
 
 void Motor::setSpeed(int duty){

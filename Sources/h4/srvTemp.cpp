@@ -7,13 +7,16 @@
 
 #include "h4/srvTemp.h"
 
-digTemp temp;
 
 srvTemp::srvTemp() {
 	// TODO Auto-generated constructor stub
 	ocupaBT = false;
 	ocupaKB = false;
 	executando = false;
+}
+
+void srvTemp::config(digTemp _temp) {
+	temp = _temp;
 }
 
 int srvTemp::getMD(){

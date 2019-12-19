@@ -5,7 +5,7 @@
  *      Author: Nader Hauache
  */
 
-#include "temp_divFreq.h"
+#include "h4/temp_divFreq.h"
 
 temp_divFreq::temp_divFreq() : temp_Timer() {
 	// TODO Auto-generated constructor stub

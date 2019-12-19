@@ -4,6 +4,7 @@
 
 class registrador {
 	public:
+		registrador();
 		explicit registrador(int valor);
 		void atualiza(int valorNovo);
 		int leValor();

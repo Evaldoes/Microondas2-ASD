@@ -40,7 +40,7 @@
  * @htmlonly    http://www.gnu.org/copyleft/gpl.html
  */
 
-#include "mkl_KeyboardParallelPort.h"
+#include "base/mkl_KeyboardParallelPort.h"
 
 /*!
  *   @fn		mkl_KeyboardParallelPort
@@ -50,6 +50,8 @@
  *	 @param[in] pinL0-pinL3 - Portas GPIO a serem utilizadas no teclado como linhas.
  *	 			pinC0-pinC3 - Portas GPIO a serem utilizadas no teclado como colunas.
  */
+mkl_KeyboardParallelPort::mkl_KeyboardParallelPort(){}
+
 mkl_KeyboardParallelPort::mkl_KeyboardParallelPort(gpio_Pin pinL0, gpio_Pin pinL1, gpio_Pin pinL2,gpio_Pin pinL3, gpio_Pin pinC0, gpio_Pin pinC1, gpio_Pin pinC2, gpio_Pin pinC3){
     /*
      * Define as portas gpio das linhas e colunas
